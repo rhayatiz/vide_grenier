@@ -1,0 +1,17 @@
+-- Axes d'améliorations: --
+
+-Meilleurs sécuriter en PHP (par ex. avec RegExp en plus)
+-Cryptage des mots de passe dans la BDD
+-Calcule des places restante des vides-grenier via Procédures Stockées dans la BDD
+-Meilleurs gestions des utilisateurs dans la BDD (problèmes de suppressions si ils ont déjà commander des places)
+-Implémenter un systémes de communication avec les admins
+-Ajouter un systeme de CAPTCHA
+
+
+-- Choix des fonctionnalitées --
+
+-Peu de JS pour pas charger les pages inutilement, car le site est très orienter 'OLD' friendly
+-Pas de possibiliter pour les admins de supprimer un vide-grenier (possible conflit avec des commandes déjà passer). A voir comment ça se gére en pratique
+-Pas de génération de billet de blog via la bdd. Je ne vois pas comment gérer facilement différentes dispositions des articles.
+
+
