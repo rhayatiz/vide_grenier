@@ -10,8 +10,6 @@ html {
 }
 
 body {
-    margin-bottom: 170px;
-    /* border: 3px solid black; */
     width: auto !important;
     overflow-x: hidden !important;
     background-color: #CED8E1;
@@ -20,9 +18,6 @@ body {
 /* Header */
 
 header {
-    /* border: 1px solid black; */
-    /* background-color: #2C3E50; */
-    /*  */
     background-color: #3AC6EA;
     width: 100%;
 }
