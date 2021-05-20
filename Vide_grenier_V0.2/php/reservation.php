@@ -45,6 +45,8 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
         $base = null; //fermeture de la connexion
     }
     ?>
+    <div class="container">
+
     <!-- Récupere la valeur en JS pour calcule dynamique -->
     <input type = hidden id = prixJS value = <?php echo $prixPlace;?>/>
 
@@ -74,16 +76,17 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
                 <label for="prenom">*Prénom: </label>
                 <input type="text" class="form-control" name="prenom" id="prenom" placeholder="Jean">
             </div>
+            <div class="form-group">
             <label for="addresse">*Adresse: </label>
             <input type="text" class="form-control" name="addresse" id="addresse" placeholder="4 avenus de l'exemple">
             </div>
+            <div>
+                <label for="postal">*Code Postal: </label>
+                <input type="text" class="form-control" name="postal" id="postal" placeholder="XXXXX">
             </div>
-            <label for="postal">*Code Postal: </label>
-            <input type="text" class="form-control" name="postal" id="postal" placeholder="XXXXX">
-            </div>
-            </div>
-            <label for="ville">*Ville: </label>
-            <input type="text" class="form-control" name="ville" id="ville" placeholder="Saint exemple">
+            <div>
+                <label for="ville">*Ville: </label>
+                <input type="text" class="form-control" name="ville" id="ville" placeholder="Saint exemple">
             </div>
             <div class="form-group">
                 <label for="portable">*Portable: </label>
@@ -143,7 +146,6 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
             <label for="remarque">Une remarque? : </label>
             <textarea name="remarque" id="remarque" cols="40" rows="5" placeholder="150 caractéres maximum..."></textarea>
             </div>
-            <div class="form-group">
             
             <div class="form-group">
                 <p>(*)Champs obligatoires</p>
@@ -165,6 +167,9 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
 
 
     </main>
+
+
+    </div>
 
 
 

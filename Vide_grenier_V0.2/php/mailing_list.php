@@ -17,7 +17,7 @@ session_start();
     include 'inc_header.php';
     ?>
 
-    <main id="mailing">
+    <main id="mailing" class="container">
 
         <section class="boxSite">
             <h3>Inscription dans la mailing List du site</h3>

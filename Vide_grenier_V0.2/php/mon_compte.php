@@ -36,13 +36,24 @@ if (isset($_SESSION["id_util"])) {
 
             <?php } ?>
 
-            <section id="récap" class="boxSite">
-                <h3>Réservation:</h3>
+            <section id="" class="container">
+                <h3>Vos réservations:</h3>
 
-
+                <table class="table bg-white rounded">
+                    <thead>
+                        <tr>
+                            <th scope="col">Vide-grenier</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Lieu</th>
+                            <th scope="col">Nombre d'emplacements</th>
+                            <th scope="col">Nom Prénom</th>
+                            <th scope="col">Mail</th>
+                            <th scope="col">Immatriculation</th>
+                            <th scope="col">Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                 <?php
-
-
                 try {
                     include 'inc_bdd.php';
 
@@ -53,40 +64,11 @@ if (isset($_SESSION["id_util"])) {
                     $resultat->execute();
 
                     while ($ligne = $resultat->fetch()) {
-
                         $mail = $ligne['MAIL_UTIL'];
-
-                        if ($ligne['NOM_UTIL'] != "") {
-
-                            $nom = $ligne['NOM_UTIL'];
-                        } else {
-
-                            $nom = "";
-                        }
-
-                        if ($ligne['PRENOM_UTIL'] != "") {
-
-                            $prenom = $ligne['PRENOM_UTIL'];
-                        } else {
-
-                            $prenom = "";
-                        }
-
-                        if ($ligne['TEL_UTIL'] != "") {
-
-                            $telephone = $ligne['TEL_UTIL'];
-                        } else {
-
-                            $telephone = "";
-                        }
-
-                        if ($ligne['DESC_UTIL'] != "") {
-
-                            $description = $ligne['DESC_UTIL'];
-                        } else {
-
-                            $description = "";
-                        }
+                        $nom = $ligne['NOM_UTIL'] != "" ? $ligne['NOM_UTIL'] : '';
+                        $prenom = $ligne['PRENOM_UTIL'] != "" ? $ligne['PRENOM_UTIL'] : '';
+                        $telephone = $ligne['TEL_UTIL'] != "" ? $ligne['TEL_UTIL'] : '';
+                        $description = $ligne['DESC_UTIL'] != "" ? $ligne['DESC_UTIL'] : '';
                     }
 
                     // Rescherche et affiche les résa faites
@@ -100,21 +82,43 @@ if (isset($_SESSION["id_util"])) {
                     while ($ligne = $resultat_select->fetch()) {
 
                         $ok = true;
+                        switch ($ligne['LABEL_STATUTS']) {
+                            case 'En attente':
+                                $color_status = "background-color:#FCF3CF; border-radius: 15px; color:#F39C12;";
+                                break;
+                                
+                            case 'Validée':
+                                $color_status = "background-color:#C7E0AF; border-radius: 15px; color:#0D6F1C;";
+                                break;
+                                
+                            case 'Refusée':
+                                $color_status = "background-color:#EDA7A7; border-radius: 15px; color:#6E0000;";
+                                break;
+                            
+                            default:
+                                $color_status = "";
+                                break;
+                        }
+                    
+                    ?>
+                    
+                    <tr class="bg-light">
+                        <th class="py-4" scope="row"><?= $ligne['LABEL_VG'] ?></th>
+                        <td class="py-4">Le <?= $ligne['DATE_VG'] ?> à <?= $ligne['HEURE_VG'] ?></td>
+                        <td class="py-4"><?= $ligne['ADDRESSE_VG'] ?></td>
+                        <td class="py-4"><?= $ligne['NOM_RESA'] ?>  <?= $ligne['PRENOM_RESA'] ?></td>
+                        <td class="py-4"><?= $ligne['MAIL_RESA'] ?></td>
+                        <td class="py-4"><?= $ligne['IMMATRICULATION_RESA'] ?></td>
+                        <td class="py-4"><?= $ligne['NBR_RESA'] ?></td>
+                        <td class="py-4">
+                            <span style="<?= $color_status ?>" class="py-1 px-3"><strong><?= $ligne['LABEL_STATUTS'] ?></strong></span>
+                        </td>
+                    </tr>
 
-                        
-                        echo "<section id=\"recapResa\">";
-                        echo "<h4>" . $ligne['LABEL_VG'] . "</h4><br/>";
-                        echo "<p>Statut de la réservation: " . $ligne['LABEL_STATUTS'] . "</p>";
-                        echo "<p>Date: " . $ligne['DATE_VG'] . " " . $ligne['HEURE_VG']  . "</p>";
-                        echo "<p>Adresse: " . $ligne['ADDRESSE_VG'] . "</p>";
-                        echo "<p>Nom Prénom de réservation: " . $ligne['NOM_RESA'] . " " . $ligne['PRENOM_RESA'] . "</p>";
-                        echo "<p>Mail de contacte: " . $ligne['MAIL_RESA'] . "</p>";
-                        echo "<p>Immatriculation enregistrer: " . $ligne['IMMATRICULATION_RESA'] . "</p>";
-                        echo "<p>Nombre de places réservées: " . $ligne['NBR_RESA'] . "</p>";
+                    <?php
                         if ($ligne['INFO_RESA'] != "") {
                             echo "<p>Informations: " . $ligne['INFO_RESA'] . "</p>";
                         }
-                        echo "<br/></section>";
                     }
 
                     if ($ok == false) {
@@ -129,17 +133,20 @@ if (isset($_SESSION["id_util"])) {
 
                     $base = null; //fermeture de la connexion
                 }
+                
 
                 ?>
+                
+                </tbody>
+                </table>
 
 
 
-            </section>
 
             <!-- On créer le form avec les valeurs par défaut du compte -->
-            <section id="update" class="boxSite">
-                <h3>Modifier Profile</h3>
-                <form method="post" action="update_inscription.php" id="updateDB">
+            <div id="update" class="boxSite container">
+                <h3>Modifier Profil</h3>
+                <form class="w-75" method="post" action="update_inscription.php" id="updateDB">
                     <div class="form-group">
                         <label for="mail">*Mail: </label>
                         <input type="text" class="form-control" name="mail" id="mail" value="<?php echo $mail ?>" placeholder="exemple@mail.com">
@@ -158,19 +165,19 @@ if (isset($_SESSION["id_util"])) {
                     </div>
                     <div class="form-group">
                         <label for="nom">Nom: </label>
-                        <input type="text" class="form-control" name="nom" id="nom" value="<?php echo $nom ?>" placeholder="Dupont">
+                        <input type="text" class="form-control" name="nom" id="nom" value="<?= $nom ?>" placeholder="<?= $nom ?>">
                     </div>
                     <div class="form-group">
                         <label for="prenom">Prénom: </label>
-                        <input type="text" class="form-control" name="prenom" id="prenom" value="<?php echo $prenom ?>" placeholder="Jean">
+                        <input type="text" class="form-control" name="prenom" id="prenom" value="<?= $prenom ?>" placeholder="<?= $prenom ?>">
                     </div>
                     <div class="form-group">
                         <label for="tel">Tel.: </label>
-                        <input type="text" class="form-control" name="tel" id="tel" value="<?php echo $telephone ?>" placeholder="0XXXXXXXXX">
+                        <input type="text" class="form-control" name="tel" id="tel" value="<?= $telephone ?>" placeholder="<?= $telephone ?>">
                     </div>
                     <div class="form-group">
                         <label for="description">Une déscription à partager? : </label>
-                        <textarea name="description" id="description" cols="31" rows="5" placeholder="280 caractéres maximum..."><?php echo $description ?></textarea>
+                        <textarea name="description" id="description" cols="31" rows="5" placeholder="280 caractéres maximum..."><?= $description ?></textarea>
                     </div>
                     <div class="form-group">
                         <p>(*)Champs obligatoires pour modifier le profil</p>
@@ -187,7 +194,7 @@ if (isset($_SESSION["id_util"])) {
                     </div>
                 </form>
 
-            </section>
+            </div>
 
 
 
