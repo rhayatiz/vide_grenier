@@ -46,7 +46,7 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
         $base = null; //fermeture de la connexion
     }
     ?>
-    <div class="container">
+    <div class="px-5">
 
     <!-- Récupere la valeur en JS pour calcule dynamique -->
     <input type = hidden id = prixJS value = <?php echo $prixPlace;?>/>
@@ -59,12 +59,29 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
         <p>Plus que <?php echo $nbrRestant ?> places disponibles.</p>
 
         <!-- Légende -->
-        <div id="my-legend-container" class="bg-light text-dark rounded pb-2 mb-1">
-            <h5 class="text-middle">Légende</h5>
+        <div class="row mx-2 mb-2">
+            <div id="my-legend-container" class="col bg-light text-dark rounded border">
+                <h5 class="text-middle">Légende</h5>
+            </div>
+
+            <div class="col bg-light rounded ml-auto text-dark border border overflow-auto" style="height:200px;">
+                <h5 class="text-middle">Panier</h5>
+                <table class="table">
+                    <thead>
+                        <td>Numéro</td>
+                        <td>Type</td>
+                        <td>Prix</td>
+                    </thead>
+                    <tbody id="liste-emplacements">
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <!-- Emplacements -->
-        <div id="seat-map" class="bg-light mx-auto rounded mb-3 text-dark mx-auto" style="height:200px"></div>
+        <div class="row mx-2 mb-2">
+            <div id="seat-map" class="col bg-light mx-auto rounded mb-3 text-dark mx-auto" style="height:200px"></div>
+        </div>
+
     </section>
 
     <main id="reservationVideGrenier" class="boxSite">
@@ -203,10 +220,12 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
             seats: {
                 a: {
                     price   : 10.99,
+                    type: 'Emplacement 2 mètres',
                     classes : 'front-seat' //your custom CSS class
                 },
                 b: {
                     price   : 15,
+                    type: 'Emplacement 3 mètres',
                     classes : 'emplacement-3m' //your custom CSS class
                 },
                 x: {
@@ -218,17 +237,30 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
             legend : {
                 node  : $('#my-legend-container'),
                 items : [
-                    [ 'a', 'available',   'Emplacement 2 mètres (10.99Euros)'],
-                    [ 'b', 'available',   'Emplacement 3 mètres (20Euros)'],
+                    [ 'a', 'available',   'Emplacement 2 mètres'],
+                    [ 'b', 'available',   'Emplacement 3 mètres'],
                     [ 'x', 'available',   'Emplacement Indisponible'],
                 ]
             },
             click: function () {
+                //Emplacement séléctionné, ajouter dans le panier
                 if (this.status() == 'available') {
-                    //do some stuff, i.e. add to the cart
+                    var row = document.createElement("tr");
+                    row.setAttribute('id', this.settings.id);
+                    $("#liste-emplacements").append(row);
+                    var td1 = document.createElement("td");
+                    td1.innerHTML = this.settings.id;
+                    row.append(td1);
+                    var td2 = document.createElement("td");
+                    td2.innerHTML = this.settings.data.price;
+                    row.append(td2);
+                    var td3 = document.createElement("td");
+                    td3.innerHTML = this.settings.data.type;
+                    row.append(td3);
                     return 'selected';
+                //Emplacement déselectionné, enlever du panier
                 } else if (this.status() == 'selected') {
-                    //seat has been vacated
+                    $('#'+this.settings.id).remove();
                     return 'available';
                 } else if (this.status() == 'unavailable') {
                     //seat has been already booked
@@ -238,6 +270,7 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
                 }
             }
         });
+
 
         //Make all available 'c' seats unavailable
         sc.find('x.available').status('unavailable');

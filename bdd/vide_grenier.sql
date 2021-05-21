@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : lun. 20 juil. 2020 à 08:37
--- Version du serveur :  10.4.11-MariaDB
--- Version de PHP : 7.2.30
+-- Généré le : ven. 21 mai 2021 à 16:14
+-- Version du serveur :  10.4.13-MariaDB
+-- Version de PHP : 7.4.7
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,6 +20,20 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `vide_grenier`
 --
+
+DELIMITER $$
+--
+-- Procédures
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_mailing_list` (IN `mail` VARCHAR(100))  BEGIN
+	INSERT INTO mailing_list(MAIL_ML) VALUES (mail);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `remove_mailing_list` (IN `mail` VARCHAR(100))  BEGIN
+	DELETE FROM mailing_list WHERE MAIL_ML = mail;
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -37,9 +51,7 @@ CREATE TABLE `mailing_list` (
 --
 
 INSERT INTO `mailing_list` (`ID_ML`, `MAIL_ML`) VALUES
-(2, 'exemple@mail.com'),
 (4, 'testTrigger@test.fr'),
-(5, 'ozzaxazxujz@azxoj.fr'),
 (7, 'consectetuer.ipsum@laoreetipsum.net'),
 (8, 'erat.vel@fermentumarcu.org'),
 (9, 'imperdiet.ullamcorper.Duis@euismodest.ca'),
@@ -139,7 +151,33 @@ INSERT INTO `mailing_list` (`ID_ML`, `MAIL_ML`) VALUES
 (103, 'sed.orci.lobortis@maurisSuspendissealiquet.com'),
 (104, 'lacus.Cras@duinec.ca'),
 (105, 'enim.Etiam@Duisdignissimtempor.ca'),
-(106, 'non.lacinia.at@arcuSed.com');
+(106, 'non.lacinia.at@arcuSed.com'),
+(107, 'miyazaki1@yopmail.com'),
+(108, 'mlolap3@yopmail.com'),
+(111, 'zakaria@mail.fr'),
+(112, 'aa@gga.fr'),
+(114, 'hello@a.f'),
+(116, 'compte_test@mail.fr'),
+(117, 'compte_test@mail.fr'),
+(118, 'compte_test@mail.fr'),
+(119, 'compte_test@mail.fr'),
+(120, 'compte_test@mail.fr'),
+(121, 'compte_test@mail.fr'),
+(122, 'compte_test@mail.fr'),
+(123, 'compte_test@mail.fr'),
+(124, 'compte_test@mail.fr'),
+(125, 'compte_test@mail.fr'),
+(126, 'compte_test@mail.fr'),
+(127, 'compte_test@mail.fr'),
+(128, 'compte_test@mail.fr'),
+(129, 'compte_test@mail.fr'),
+(130, 'compte_test@mail.fr'),
+(131, 'compte_test@mail.fr'),
+(132, 'compte_test@mail.fr'),
+(133, 'compte_test@mail.fr'),
+(134, 'compte_test@mail.fr'),
+(135, 'compte_test@mail.fr'),
+(136, 'compte_test@mail.fr');
 
 -- --------------------------------------------------------
 
@@ -172,7 +210,9 @@ CREATE TABLE `reservation_vg` (
 --
 
 INSERT INTO `reservation_vg` (`ID_RESA`, `ID_VG`, `ID_UTIL`, `NOM_RESA`, `PRENOM_RESA`, `MAIL_RESA`, `ADDRESSE_RESA`, `CODE_POSTAL_RESA`, `VILLE_RESA`, `PORTABLE_RESA`, `CNI_RESA`, `DELIVRE_CNI_RESA`, `PAR_CNI_RESA`, `IMMATRICULATION_RESA`, `NBR_RESA`, `INFO_RESA`, `STATU_RESA`) VALUES
-(1, 2, 6, 'Bill', 'Jean', 'ozejfujz@dzeoj.fr', '5 rue jesaispas', '66666', 'Haha', '0645454545', '1111111111', '23/02/1990', 'Moi', 'AB-123-CD', 1, 'e', 2);
+(2, 2, 2, 'mom', 'non', 'adresse@mail.fr', '123 avenue exemple', '12333', 'Lyon', '0123456789', 'ZAEP1EK1E3O1', '12/12/1990', 'Lyon', '123 AB 11', 6, NULL, 2),
+(3, 3, 2, 'nom', 'prenom', 'a@b.da', '23232', '69123', 'Saint', '0123456789', '31209312P', '01/01/2000', 'lyon', '123 AB 12', 1, NULL, 3),
+(4, 2, 2, 'nom', 'prenom', 'aa@ee.fr', '4 aa', '6900', 'sa', '0123456789', 'aaa123a46', '01/01/2000', 'rhone', 'aa-222-ac', 2, NULL, 3);
 
 -- --------------------------------------------------------
 
@@ -190,9 +230,9 @@ CREATE TABLE `statuts` (
 --
 
 INSERT INTO `statuts` (`ID_STATUTS`, `LABEL_STATUTS`) VALUES
-(1, 'EN ATTENTE'),
-(2, 'VALIDEE'),
-(3, 'ANNULEE');
+(1, 'En attente'),
+(2, 'Validée'),
+(3, 'Refusée');
 
 -- --------------------------------------------------------
 
@@ -216,7 +256,7 @@ CREATE TABLE `utilisateur` (
 --
 
 INSERT INTO `utilisateur` (`ID_UTIL`, `MAIL_UTIL`, `MDP_UTIL`, `NOM_UTIL`, `PRENOM_UTIL`, `TEL_UTIL`, `DESC_UTIL`, `ADMIN_UTIL`) VALUES
-(2, 'adresse@mail.fr', 'aaaaaa', NULL, 'Roger', '0222222222', 'dazdazdaz', NULL),
+(2, 'adresse@mail.fr', 'aaaaaa', 'Dupiont', 'Rogere', '0222222222', 'dazdazdaz', NULL),
 (6, 'admin@admin.fr', 'xxxxxx', 'Admin', 'Alvin', NULL, 'Admin du site', 1),
 (7, 'dee@dee.com', 'eeeeee', 'Ben', 'Roger', NULL, 'Une description', NULL),
 (10, 'testTrigger@test.fr', 'eeeeee', NULL, NULL, NULL, NULL, NULL),
@@ -321,7 +361,10 @@ INSERT INTO `utilisateur` (`ID_UTIL`, `MAIL_UTIL`, `MDP_UTIL`, `NOM_UTIL`, `PREN
 (109, 'sed.orci.lobortis@maurisSuspendissealiquet.com', 'convallis', 'Rowland', 'Kylie', '0396375414', 'aliquet molestie tellus. Aenean egestas hendrerit', NULL),
 (110, 'lacus.Cras@duinec.ca', 'vitae', 'Mcfarland', 'May', '0265682613', 'Duis cursus, diam at pretium aliquet,', NULL),
 (111, 'enim.Etiam@Duisdignissimtempor.ca', 'sed', 'Dotson', 'Keefe', '0258133673', 'ipsum. Curabitur consequat, lectus sit amet luctus vulputate, nisi', NULL),
-(112, 'non.lacinia.at@arcuSed.com', 'Sed', 'Powell', 'Adena', '0504628589', 'Sed congue, elit sed consequat auctor, nunc', NULL);
+(112, 'non.lacinia.at@arcuSed.com', 'Sed', 'Powell', 'Adena', '0504628589', 'Sed congue, elit sed consequat auctor, nunc', NULL),
+(113, 'miyazaki1@yopmail.com', '123+aze', 'zaj', 'Jean', '0392313222', NULL, NULL),
+(114, 'mlolap3@yopmail.com', '123+aze', 'dumpont', 'jmean', '0231328189', 'nn', NULL),
+(115, 'zakaria@mail.fr', '123+aze', 'rh', 'zakaria', '0123456789', 'non', NULL);
 
 --
 -- Déclencheurs `utilisateur`
@@ -330,7 +373,7 @@ DELIMITER $$
 CREATE TRIGGER `inscription_mailing_auto` AFTER INSERT ON `utilisateur` FOR EACH ROW BEGIN
     
   
-		INSERT INTO mailing_list (MAIL_ML) VALUE(NEW.MAIL_UTIL);
+	INSERT INTO mailing_list (MAIL_ML) VALUE(NEW.MAIL_UTIL);
     
     
 END
@@ -359,8 +402,9 @@ CREATE TABLE `videgrenier` (
 --
 
 INSERT INTO `videgrenier` (`ID_VG`, `LABEL_VG`, `DATE_VG`, `HEURE_VG`, `ADDRESSE_VG`, `NBR_EMPLACEMENTS`, `NBR_RESTANT_VG`, `PRIX_EMPLACEMENTS`) VALUES
-(2, 'Vide-grenier annuel 2016', '03/07/2016', 'de 6h à 16h', 'Esplanade de la Gravière, Avenue De Limburg., Sainte-foy-lès-lyon 69110', 100, 67, '20'),
-(3, 'Test vide-grenier par Admin', '10/02/9999', 'de 4h à 23h', 'Un exemple random, 44444 Ville', 102, 96, '300');
+(2, 'Vide-grenier annuel 2016', '03/07/2016', 'de 6h à 16h', 'Esplanade de la Gravière, Avenue De Limburg., Sainte-foy-lès-lyon 69110', 100, 59, '20'),
+(3, 'Test vide-grenier par Admin', '10/02/9999', 'de 4h à 23h', 'Un exemple random, 44444 Ville', 102, 95, '300'),
+(5, 'Vide grenier printemps', '01/04/2021', 'de 08h à 16h', '52 Place des reines, 69004 Lyon', 200, 0, '35');
 
 --
 -- Index pour les tables déchargées
@@ -404,13 +448,13 @@ ALTER TABLE `videgrenier`
 -- AUTO_INCREMENT pour la table `mailing_list`
 --
 ALTER TABLE `mailing_list`
-  MODIFY `ID_ML` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
+  MODIFY `ID_ML` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=137;
 
 --
 -- AUTO_INCREMENT pour la table `reservation_vg`
 --
 ALTER TABLE `reservation_vg`
-  MODIFY `ID_RESA` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID_RESA` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `statuts`
@@ -422,13 +466,13 @@ ALTER TABLE `statuts`
 -- AUTO_INCREMENT pour la table `utilisateur`
 --
 ALTER TABLE `utilisateur`
-  MODIFY `ID_UTIL` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
+  MODIFY `ID_UTIL` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=137;
 
 --
 -- AUTO_INCREMENT pour la table `videgrenier`
 --
 ALTER TABLE `videgrenier`
-  MODIFY `ID_VG` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID_VG` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
