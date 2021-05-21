@@ -46,7 +46,7 @@ div.seatCharts-row:after {
 }
 
 div.seatCharts-seat.selected {
-	background-color: rgb(7, 120, 185);
+	background-color: rgb(7, 120, 185) !important;
 }
 
 div.seatCharts-seat.focused {
@@ -68,4 +68,16 @@ ul.seatCharts-legendList {
 li.seatCharts-legendItem {
 	margin-top: 10px;
 	line-height: 2;
+}
+
+/*****************
+***CUSTOM CSS*****
+****************/
+.emplacement-3m {
+	background-color: rgb(148, 80, 212) !important;
+}
+
+
+.emplacement-indisponible {
+	background-color: rgb(182, 182, 182) !important;
 }

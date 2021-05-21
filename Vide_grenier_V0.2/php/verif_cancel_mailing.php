@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if ($_POST['mailInscription'] != "") {
+if ($_POST['mailCancel'] != "") {
 
 ?>
 <!DOCTYPE html>
@@ -18,10 +18,6 @@ if ($_POST['mailInscription'] != "") {
 <body>
     <?php
     include 'inc_header.php';
-    ?>
-
-    <?php
-
     try {
         include 'inc_bdd.php';
 
@@ -45,7 +41,7 @@ if ($_POST['mailInscription'] != "") {
 
         if ($okDoublon) {
 
-            $insert_mailing = "DELETE FROM mailing_list WHERE MAIL_ML = :mail_cancel";
+            $insert_mailing = "CALL remove_mailing_list(:mail_cancel)";
             $resultat_insert = $base->prepare($insert_mailing);
 
             $resultat_insert->bindParam(':mail_cancel', $mail);

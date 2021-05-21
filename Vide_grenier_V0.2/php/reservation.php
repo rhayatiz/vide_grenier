@@ -58,8 +58,13 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
         <p>Où? <?php echo $addresse ?></p>
         <p>Plus que <?php echo $nbrRestant ?> places disponibles.</p>
 
-        <div id="seat-map" class="bg-light mx-auto rounded mb-3 text-dark mx-auto" style="height:200px">
+        <!-- Légende -->
+        <div id="my-legend-container" class="bg-light text-dark rounded pb-2 mb-1">
+            <h5 class="text-middle">Légende</h5>
         </div>
+
+        <!-- Emplacements -->
+        <div id="seat-map" class="bg-light mx-auto rounded mb-3 text-dark mx-auto" style="height:200px"></div>
     </section>
 
     <main id="reservationVideGrenier" class="boxSite">
@@ -189,17 +194,34 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
     $(document).ready(function() {
 
         var sc = $('#seat-map').seatCharts({
+            rows: false,
             map: [
-                'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-                'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+                'axxaaaaaaaaaaaaxaaaaaaaaaaaaaaa',
+                'aaaaaxxaaaaaaaxaaaaaaaaaaaxxaaa',
                 'bbbbbbbbbb__bbbbbbbbb____bbb',
             ],
             seats: {
                 a: {
-                    price   : 99.99,
+                    price   : 10.99,
                     classes : 'front-seat' //your custom CSS class
+                },
+                b: {
+                    price   : 15,
+                    classes : 'emplacement-3m' //your custom CSS class
+                },
+                x: {
+                    price   : 15,
+                    classes : 'emplacement-indisponible' //your custom CSS class
                 }
             
+            },
+            legend : {
+                node  : $('#my-legend-container'),
+                items : [
+                    [ 'a', 'available',   'Emplacement 2 mètres (10.99Euros)'],
+                    [ 'b', 'available',   'Emplacement 3 mètres (20Euros)'],
+                    [ 'x', 'available',   'Emplacement Indisponible'],
+                ]
             },
             click: function () {
                 if (this.status() == 'available') {
@@ -218,7 +240,7 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
         });
 
         //Make all available 'c' seats unavailable
-        sc.find('c.available').status('unavailable');
+        sc.find('x.available').status('unavailable');
 
         /*
         Get seats with ids 2_6, 1_7 (more on ids later on),
