@@ -234,3 +234,24 @@ footer img {
     margin-left: 10px;
 }
 
+/***************
+Carte de réservation
+**************/
+
+div.seatCharts-row {
+    min-width: 1260px !important;
+    height: 35px !important;
+}
+
+div.seatCharts-container {
+    overflow-x: scroll !important;
+}
+
+div.seatCharts-cell {
+    height: 24px !important;
+    width: 24px !important;
+}
+
+#seat-map {
+    height: 350px;
+}

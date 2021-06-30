@@ -79,15 +79,16 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
         </div>
 
         <div class="row mx-2 mb-2">
-            <div id="seat-map" class="col bg-light mx-auto rounded mb-3 text-dark mx-auto" style="height:200px"></div>
+            <div id="seat-map" class="col bg-light mx-auto rounded mb-3 text-dark mx-auto"></div>
         </div>
 
     </section>
 
-    <main id="reservationVideGrenier" class="boxSite">
+    <main id="reservationVideGrenier" class="boxSite row">
 
-
-
+        <!-- COL 1 informations personnelles -->
+        <div class="col">
+        
         <form method="post" action="verif_resa.php?idVG=<?php echo $_GET['idVG']?>" id="resaDB">
 
             <div class="form-group">
@@ -141,6 +142,10 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
                 <span id='resultatPrix'></span>
                 
             </div>
+        </div>
+
+        <!-- Col 2 - règles  -->
+        <div class="col p-5">
             <p class="text-justify">Ces emplacements vous sont personnels et seront déclarés au registre réglementaire pour remise au Maire de la commune à l'issu du Vide Grenier.</p>
 
             <p class="text-justify">Ils sont donc non revendable ni cessibles.
@@ -188,6 +193,8 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
                 ?>
             </div>
         </form>
+        </div>
+
 
 
 
@@ -201,6 +208,7 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
 
     <?php
     include 'inc_footer.php';
+    include 'api_map.php'; // récupérer $map pour le JS
     ?>
 
     <script src="../js/jquery-3.5.0.js"></script>
@@ -208,15 +216,15 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
     <script src="../js/myscript.js"></script>
     <script src="../js/jquery.seat-charts.min.js"></script>
     <script>
+    
+    var api_map_array = <?= json_encode($api_map_array) ?>;
+    console.log(api_map_array);
+
     $(document).ready(function() {
 
         var sc = $('#seat-map').seatCharts({
             rows: false,
-            map: [
-                'axxaaaaaaaaaaaaxaaaaaaaaaaaaaaa',
-                'aaaaaxxaaaaaaaxaaaaaaaaaaaxxaaa',
-                'bbbbbbbbbb__bbbbbbbbb____bbb',
-            ],
+            map: api_map_array,
             seats: {
                 a: {
                     price   : 10.99,
