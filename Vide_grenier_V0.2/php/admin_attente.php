@@ -12,10 +12,12 @@ if (isset($_SESSION['id_util']) && $_SESSION["admin"] == 1) {
         <title>Liste des demandes en attentes | CIL de la Gravière</title>
         <link rel="stylesheet" href="../css/bootstrap.min.css">
         <link rel="stylesheet" href="../css/monstyle.css">
+        <!-- ICON -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    
     </head>
 
     <body>
-    
         <?php
         include 'inc_header.php';
         ?>
@@ -26,18 +28,45 @@ if (isset($_SESSION['id_util']) && $_SESSION["admin"] == 1) {
                 include 'inc_bdd.php';
 
                 // liste des demande de VG en attente de validation ou d'annulation
-                $select_attente =  "SELECT * FROM reservation_vg JOIN videgrenier ON reservation_vg.id_vg = videgrenier.id_vg JOIN statuts ON reservation_vg.statu_resa = statuts.id_statuts WHERE STATU_RESA = 1";
+                $select_attente =  "SELECT * FROM reservation_vg JOIN videgrenier ON reservation_vg.id_vg = videgrenier.id_vg JOIN statuts ON reservation_vg.statu_resa = statuts.id_statuts /*WHERE STATU_RESA = 1*/";
 
                 $resultat_select = $base->prepare($select_attente);
                 $resultat_select->execute();
 
-                $table = "<table class=\"table table-striped\"><tr><th>Label VG</th><th>Nom</th><th>Prenom</th><th>Nombre de place</th><th>Commentaires</th><th class=\"text-center\">Voir</th></tr>";
+                $table = "<table class=\"table table-striped\">
+                <tr>
+                    <th>#ID</th>
+                    <th>Vide grenier</th>
+                    <th>Nom</th>
+                    <th>Prenom</th>
+                    <th>Date</th>
+                    <th>N°Places</th>
+                    <th>Etat</th>
+                    <th> </th>
+                </tr>";
 
-                
-                
                 while ($ligne = $resultat_select->fetch()) {
-                
-                    $table .= "<tr><td>" . $ligne['LABEL_VG'] . "</td><td>" . $ligne['NOM_RESA'] . "</td><td>" . $ligne['PRENOM_RESA'] . "</td><td>" . $ligne['NBR_RESA'] . "</td><td>" . $ligne['INFO_RESA'] . "</td><td class=\"text-center\"><a class=\"bouton\" href=\"admin_voir_resa.php?id_resa=".$ligne['ID_RESA']."\">Voir</a></td></tr>";
+                    switch ($ligne['STATU_RESA']) 
+                    {
+                        case 1:
+                            $info="<td style='color:orange'> en attente </td>";
+                            break;
+                        case 2:
+                            $info="<td style='color:green'> validée </td>";
+                            break;
+                        case 3:
+                            $info="<td style='color:red'> refusée </td>";
+                            break;
+                    }
+                    $table .= "<tr>
+                        <td>" . $ligne['ID_RESA'] . "</td>
+                        <td>" . $ligne['LABEL_VG'] . "</td>
+                        <td>" . $ligne['NOM_RESA'] . "</td>
+                        <td>" . $ligne['PRENOM_RESA'] . "</td>
+                        <td>" . $ligne['INFO_RESA'] . "</td>
+                        <td>" . $ligne['NBR_RESA'] . "</td> $info 
+                        <td class=\"text-center\"><a href=\"admin_voir_resa.php?id_resa=".$ligne['ID_RESA']."\"><i class='fas fa-pen'></i></a></td>
+                        </tr>";
                 }
 
                 $table .= "</table>";
@@ -57,8 +86,6 @@ if (isset($_SESSION['id_util']) && $_SESSION["admin"] == 1) {
                 $base = null; //fermeture de la connexion
             }
             ?>
-
-
         </main>
         <?php
         include 'inc_footer.php';
