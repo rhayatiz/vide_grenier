@@ -7,11 +7,12 @@
   -- --------------------------------------------------
   -- -- Drop pour clear la BDD (tables & procédures)
   -- --------------------------------------------------
+  DROP TABLE IF EXISTS reservation_place;
   DROP TABLE IF EXISTS videgrenier;
   DROP TABLE IF EXISTS utilisateur;
   DROP TABLE IF EXISTS statuts;
-  DROP TABLE IF EXISTS reservation_vg;
   DROP TABLE IF EXISTS mailing_list;
+  DROP TABLE IF EXISTS reservation_vg;
   DROP TABLE IF EXISTS places;
   
   DROP PROCEDURE IF EXISTS add_mailing_list;
@@ -121,6 +122,22 @@
     FOREIGN KEY (reservation_id) REFERENCES reservation_vg(ID_RESA),
     FOREIGN KEY (place_id) REFERENCES places(id)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+  -- --
+  -- -- Index pour la table `reservation_place`
+  -- --
+  -- ALTER TABLE `reservation_place`
+  --   ADD KEY `fk_reservation_place_places` (`place_id`),
+  --   ADD KEY `fk_reservation_place_reservation` (`reservation_id`);
+
+  -- -- --------------------------------------------------------
+  -- -- Clés étrangères table reservation_place
+  -- -- --------------------------------------------------------
+  -- ALTER TABLE `reservation_place`
+  --   ADD CONSTRAINT `fk_reservation_place_places` FOREIGN KEY (`place_id`) REFERENCES `places` (`id`),
+  --   ADD CONSTRAINT `fk_reservation_place_reservation` FOREIGN KEY (`reservation_id`) REFERENCES `reservation_vg` (`ID_RESA`);
+  -- COMMIT;
+
 
   -- ---------------------------------------------
   -- trigger `inscription_mailing_auto`
