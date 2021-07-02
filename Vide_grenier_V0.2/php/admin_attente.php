@@ -20,6 +20,7 @@ if (isset($_SESSION['id_util']) && $_SESSION["admin"] == 1) {
     <body>
         <?php
         include 'inc_header.php';
+        include 'api/getDemandeReservationMap.php'; // récupérer $map pour le JS
         ?>
         <main id="listeAttente">
             <?php
@@ -46,6 +47,11 @@ if (isset($_SESSION['id_util']) && $_SESSION["admin"] == 1) {
                 </tr>";
 
                 while ($ligne = $resultat_select->fetch()) {
+                    
+                    //NB de places reservées
+                    $placesReservees = sizeof(getPlacesReservees($ligne['ID_RESA']));
+
+
                     switch ($ligne['STATU_RESA']) 
                     {
                         case 1:
@@ -58,15 +64,22 @@ if (isset($_SESSION['id_util']) && $_SESSION["admin"] == 1) {
                             $info="<td style='color:red'> refusée </td>";
                             break;
                     }
-                    $table .= "<tr>
+                    $table .= "
                         <td>" . $ligne['ID_RESA'] . "</td>
                         <td>" . $ligne['LABEL_VG'] . "</td>
                         <td>" . $ligne['NOM_RESA'] . "</td>
                         <td>" . $ligne['PRENOM_RESA'] . "</td>
                         <td>" . $ligne['INFO_RESA'] . "</td>
-                        <td>" . $ligne['NBR_RESA'] . "</td> $info 
-                        <td class=\"text-center\"><a href=\"admin_voir_resa.php?id_resa=".$ligne['ID_RESA']."\"><i class='fas fa-pen'></i></a></td>
-                        </tr>";
+                        <td>" . $placesReservees . "</td> $info ";
+
+                        //Si la réservation n'est pas validée
+                        if ($ligne['STATU_RESA'] != 2 && $ligne['STATU_RESA'] != 3){
+                            $table .= "<td class=\"text-center\"><a href=\"admin_voir_resa.php?id_resa=".$ligne['ID_RESA']."\"><i class='fas fa-pen'></i></a></td>";
+                        }else{
+                            $table .= "<td></td>";
+                        }
+
+                        $table .= "</tr>";
                 }
 
                 $table .= "</table>";

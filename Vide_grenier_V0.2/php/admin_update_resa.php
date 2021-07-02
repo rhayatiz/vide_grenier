@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (isset($_SESSION['id_util']) && $_SESSION["admin"] == 1 && $_POST["choix"] != "" && isset($_GET["id_resa"])) {
+if (isset($_SESSION['id_util']) && $_SESSION["admin"] == 1 && $_GET["choix"] != "" && isset($_GET["id_resa"])) {
 ?>
     <!DOCTYPE html>
     <html lang="fr">
@@ -28,7 +28,7 @@ if (isset($_SESSION['id_util']) && $_SESSION["admin"] == 1 && $_POST["choix"] !=
                 $update_resa = "UPDATE reservation_vg SET statu_resa = :statu WHERE id_resa = :id";
                 $resultat_update = $base->prepare($update_resa);
                 $resultat_update->bindParam(':id', $_GET["id_resa"]);
-                $resultat_update->bindParam(':statu', $_POST["choix"]);
+                $resultat_update->bindParam(':statu', $_GET["choix"]);
 
                 $resultat_update->execute();
                 echo "<section id=\"updateValidée\" class=\"boxSite\">Votre mis à jour de la demande est validée!<br/>

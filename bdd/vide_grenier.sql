@@ -169,12 +169,18 @@
   (136, 'compte_inscrit_mailing_list@mail.fr');
 
   --
+  -- Déchargement des données de la table `videgrenier`
+  --
+  INSERT INTO `videgrenier` (`ID_VG`, `LABEL_VG`, `DATE_VG`, `HEURE_VG`, `ADDRESSE_VG`, `NBR_EMPLACEMENTS`, `NBR_RESTANT_VG`, `PRIX_EMPLACEMENTS`) VALUES
+  (2, 'Vide-grenier annuel 2016', '03/07/2016', 'de 6h à 16h', 'Esplanade de la Gravière, Avenue De Limburg., Sainte-foy-lès-lyon 69110', 100, 59, '20');
+
+  --
   -- Déchargement des données de la table `reservation_vg`
   --
   INSERT INTO `reservation_vg` (`ID_RESA`, `ID_VG`, `ID_UTIL`, `NOM_RESA`, `PRENOM_RESA`, `MAIL_RESA`, `ADDRESSE_RESA`, `CODE_POSTAL_RESA`, `VILLE_RESA`, `PORTABLE_RESA`, `CNI_RESA`, `DELIVRE_CNI_RESA`, `PAR_CNI_RESA`, `IMMATRICULATION_RESA`, `NBR_RESA`, `INFO_RESA`, `STATU_RESA`) VALUES
-  (2, 2, 2, 'mom', 'non', 'adresse@mail.fr', '123 avenue exemple', '12333', 'Lyon', '0123456789', 'ZAEP1EK1E3O1', '12/12/1990', 'Lyon', '123 AB 11', 6, NULL, 2),
-  (4, 2, 2, 'nom', 'prenom', 'aa@ee.fr', '4 aa', '6900', 'sa', '0123456789', 'aaa123a46', '01/01/2000', 'rhone', 'aa-222-ac', 2, NULL, 3);
-
+(5, 2, 2, 'Dupont', 'Jean', '38et48@mail.fr', '4 avenus de l\'exemple', '01234', 'Saint exemple', '0123456789', 'A12345334', '02/02/2002', 'Préfecture du rhône', 'AB-124-ER', 0, NULL, 2),
+(6, 2, 6, 'Henri', 'Paul', 'associationb_bric_a_brac@mail.fr', '56 rue de la croix', '69005', 'Lyon', '0123456789', 'A12354389', '02/02/2010', 'Préfecture du rhône', 'AB-534-XZ', 0, NULL, 1);
+  
   --
   -- Déchargement des données de la table `statuts`
   --
@@ -194,13 +200,7 @@
   (114, 'mlolap3@yopmail.com', '123+aze', 'dumpont', 'jmean', '0231328189', 'nn', NULL),
   (115, 'zakaria@mail.fr', '123+aze', 'rh', 'zakaria', '0123456789', 'non', NULL);
 
-  --
-  -- Déchargement des données de la table `videgrenier`
-  --
-  INSERT INTO `videgrenier` (`ID_VG`, `LABEL_VG`, `DATE_VG`, `HEURE_VG`, `ADDRESSE_VG`, `NBR_EMPLACEMENTS`, `NBR_RESTANT_VG`, `PRIX_EMPLACEMENTS`) VALUES
-  (2, 'Vide-grenier annuel 2016', '03/07/2016', 'de 6h à 16h', 'Esplanade de la Gravière, Avenue De Limburg., Sainte-foy-lès-lyon 69110', 100, 59, '20'),
-  (3, 'Test vide-grenier par Admin', '10/02/9999', 'de 4h à 23h', 'Un exemple random, 44444 Ville', 102, 95, '300'),
-  (5, 'Vide grenier printemps', '01/04/2021', 'de 08h à 16h', '52 Place des reines, 69004 Lyon', 200, 0, '35');
+
 
 --
 -- Déchargement des données de la table `places` (les emplacements pour la carte)
@@ -534,3 +534,19 @@ INSERT INTO `places` (`id`, `coords`, `type`) VALUES
 (326, '8_39', '_'),
 (327, '8_40', '_'),
 (328, '8_41', '_');
+
+--
+-- Déchargement des données de la table `reservation_place`
+--
+
+INSERT INTO `reservation_place` (`id`, `reservation_id`, `place_id`) VALUES
+(1, 5, 90),
+(2, 5, 131),
+(7, 6, 140),
+(8, 6, 99),
+(9, 6, 100),
+(10, 6, 141),
+(11, 6, 101),
+(12, 6, 142),
+(13, 6, 102),
+(14, 6, 143);

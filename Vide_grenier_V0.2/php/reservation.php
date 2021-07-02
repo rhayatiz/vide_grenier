@@ -107,7 +107,7 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
         </div>
 
         <div class="row mx-2 mb-2">
-            <div id="seat-map" class="col bg-light mx-auto rounded mb-3 text-dark mx-auto"></div>
+            <div id="seat-map" class="col bg-light mx-auto rounded mb-3 text-dark mx-auto border rounded"></div>
         </div>
 
     </section>
@@ -250,7 +250,8 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
 
     <?php
     include 'inc_footer.php';
-    include 'api_map.php'; // récupérer $map pour le JS
+    include 'api/getReservationMap.php'; // récupérer $map pour le JS
+    $api_map_array = getPageReservationMap();
     ?>
 
     <script src="../js/jquery-3.5.0.js"></script>
@@ -263,7 +264,6 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
     console.log(api_map_array);
 
     $(document).ready(function() {
-
         var places_reservees = [];
         var sc = $('#seat-map').seatCharts({
             rows: false,
@@ -306,6 +306,7 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
                         places_reservees.push(this.settings.id);
                         let newTotal = parseFloat($('#prixTotal').val())  +  parseFloat(this.settings.data.price);
                         $('#prixTotal').val(newTotal.toFixed(2));
+                        $('#nbPlaces').text(places_reservees.length);
                     }
                     $('#resaDB')[0].coords_places_reservees.value = places_reservees;
                     //Emplacement séléctionné, ajouter dans le panier
@@ -332,6 +333,7 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
                         places_reservees.splice(places_reservees.indexOf(this.settings.id), 1);
                         let newTotal = parseFloat($('#prixTotal').val())  -  parseFloat(this.settings.data.price);
                         $('#prixTotal').val(newTotal.toFixed(2));
+                        $('#nbPlaces').text(places_reservees.length);
                     }
                     $('#resaDB')[0].coords_places_reservees.value = places_reservees;
                     $('#'+this.settings.id).remove();
@@ -356,9 +358,7 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
         sc.get(['2_6', '1_7']).node().css({
             color: '#ffcfcf'
         });
-
         console.log('Seat 1_2 costs ' + sc.get('1_2').data().price + ' and is currently ' + sc.status('1_2'));
-
         });
     </script>
 </body>
