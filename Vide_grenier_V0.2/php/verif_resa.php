@@ -1,7 +1,7 @@
 <?php 
 session_start();
 // On test toutes les données obligatoires
-if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['nom'] !="" && $_POST['prenom'] !="" && $_POST['addresse'] !="" && $_POST['postal'] !="" && $_POST['ville'] !="" && $_POST['numCNI'] !="" && $_POST['dateCNI'] !="" && $_POST['parCNI'] !="" && $_POST['portable'] !="" && $_POST['nbrEmplacement'] !="") {
+if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['nom'] !="" && $_POST['prenom'] !="" && $_POST['addresse'] !="" && $_POST['postal'] !="" && $_POST['ville'] !="" && $_POST['numCNI'] !="" && $_POST['dateCNI'] !="" && $_POST['parCNI'] !="" && $_POST['portable'] !="" ) {
 
 ?>
 <!DOCTYPE html>
@@ -22,6 +22,10 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['nom'] !="" &&
 
 
     <?php
+    // echo "<pre>";
+    // print_r($_POST);
+    // echo "</pre>";
+    // exit();
 
     try {
         include 'inc_bdd.php';
@@ -60,7 +64,7 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['nom'] !="" &&
             $dateCNI = htmlspecialchars($_POST['dateCNI']);
             $parCNI = htmlspecialchars($_POST['parCNI']);
             $portable = htmlspecialchars($_POST['portable']);
-            $nbrEmplacement = htmlspecialchars($_POST['nbrEmplacement']);
+            // $nbrEmplacement = htmlspecialchars($_POST['nbrEmplacement']);
 
 
 
@@ -71,42 +75,40 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['nom'] !="" &&
             $resultat0->execute();
             $nbrPlaceRestant = $resultat0->fetchColumn();
   
-            $nbrPlaceRestantApresResa = (int) ($nbrPlaceRestant - $nbrEmplacement);
+            // $nbrPlaceRestantApresResa = (int) ($nbrPlaceRestant - $nbrEmplacement);
 
-            if ($nbrPlaceRestantApresResa <= 0){
+            // if ($nbrPlaceRestantApresResa <= 0){
 
-                header("Location:reservation.php?erreur_reservation=" . urlencode("*Désoler, plus de places disponibles"));
-            }
+            //     header("Location:reservation.php?erreur_reservation=" . urlencode("*Désoler, plus de places disponibles"));
+            // }
   
 
-            $update_place = "UPDATE videgrenier SET nbr_restant_vg = :restant WHERE id_vg = :id";
-            $resultat_update = $base->prepare($update_place);
+            // $update_place = "UPDATE videgrenier SET nbr_restant_vg = :restant WHERE id_vg = :id";
+            // $resultat_update = $base->prepare($update_place);
 
-            $resultat_update->bindParam(':id', $id_vg);
-            $resultat_update->bindParam(':restant', $nbrPlaceRestantApresResa);
-            $resultat_update->execute();
+            // $resultat_update->bindParam(':id', $id_vg);
+            // $resultat_update->bindParam(':restant', $nbrPlaceRestantApresResa);
+            // $resultat_update->execute();
 
             if ($_POST['immatriculation'] == "") {
-
                 $tempImma = "";
                 $valueImma = "";
             } else {
-
                 $tempImma = ", IMMATRICULATION_RESA";
                 $valueImma = ", :immatricul";
             }
 
             if ($_POST['remarque'] == "") {
-
                 $tempInfo = "";
                 $valueInfo = "";
             } else {
-
                 $tempInfo = ", INFO_RESA";
                 $valueInfo = ", :info";
             }
 
-            $insert_resa = "INSERT INTO reservation_vg (ID_VG, ID_UTIL, NOM_RESA, PRENOM_RESA, MAIL_RESA, ADDRESSE_RESA, CODE_POSTAL_RESA, VILLE_RESA, PORTABLE_RESA, CNI_RESA, DELIVRE_CNI_RESA, PAR_CNI_RESA $tempImma, NBR_RESA $tempInfo ) VALUES (:id_vg, :id, :nom, :prenom, :mail, :addresse, :postal, :ville, :portable, :cni, :delivrer, :par $valueImma, :nbr $valueInfo )";
+            $insert_resa = "INSERT INTO reservation_vg (ID_VG, ID_UTIL, NOM_RESA, PRENOM_RESA, MAIL_RESA, ADDRESSE_RESA, CODE_POSTAL_RESA, VILLE_RESA, PORTABLE_RESA, CNI_RESA, DELIVRE_CNI_RESA, PAR_CNI_RESA $tempImma $tempInfo ) 
+            VALUES 
+            (:id_vg, :id, :nom, :prenom, :mail, :addresse, :postal, :ville, :portable, :cni, :delivrer, :par $valueImma $valueInfo )";
             $resultat_insert = $base->prepare($insert_resa);
 
             $resultat_insert->bindParam(':id_vg', $id_vg);
@@ -121,21 +123,41 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG']) && $_POST['nom'] !="" &&
             $resultat_insert->bindParam(':delivrer', $dateCNI);
             $resultat_insert->bindParam(':par', $parCNI);
             $resultat_insert->bindParam(':portable', $portable);
-            $resultat_insert->bindParam(':nbr', $nbrEmplacement);
+            // $resultat_insert->bindParam(':nbr', $nbrEmplacement);
 
             if ($_POST['immatriculation'] != "") {
-
                 $immatriculation = htmlspecialchars($_POST['immatriculation']);
                 $resultat_insert->bindParam(':immatricul', $immatriculation);
             }
-
             if ($_POST['remarque'] != "") {
-
                 $remarque = htmlspecialchars($_POST['remarque']);
                 $resultat_insert->bindParam(':info', $remarque);
             }
-
             $resultat_insert->execute();
+            
+            //récupérer l'id de la réservation créé
+            $id_resa =  $base->lastInsertId();
+            //Pour chaque place réservée
+            //Créer la relation reservation->place dans relation_place
+            foreach (explode(',', $_POST['coords_places_reservees']) as $coords_place){
+                //récupérer l'ID de la place
+                $request = $base->prepare("SELECT * FROM places WHERE coords = :coords");
+                $request->bindParam(':coords', $coords_place);
+                $request->execute();
+                $place = $request->fetchObject();
+
+                //Insérer la relation reservation->place
+                $request = $base->prepare("INSERT INTO 
+                    reservation_place 
+                    (reservation_id, place_id)
+                    VALUES (:res_id, :place_id)");
+                $request->bindParam(':res_id', $id_resa);
+                $request->bindParam(':place_id', $place->id);
+                $request->execute();
+            }
+
+
+
             echo "<section id=\"resaValidée\" class=\"boxSite\">Votre réservation est validée!<br/>
         <a class=\"nav-link\" href=\"mon_compte.php\">Voir mon compte</a></section>";
         }

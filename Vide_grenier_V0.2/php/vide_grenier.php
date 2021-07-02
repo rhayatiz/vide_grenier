@@ -45,6 +45,24 @@ session_start();
                 $addresse = $ligne['ADDRESSE_VG'];
                 $nbrRestant = $ligne['NBR_RESTANT_VG'];
                 $nbrEmplacements = $ligne['NBR_EMPLACEMENTS'];
+
+                //Séléctionner nb total de places
+                $select_nb_places = "select count(*) as nbPlaces from places where type != '_' and type != 'x'";
+                $resultat = $base->prepare($select_nb_places);
+                $resultat->execute();
+                $totalPlaces = $resultat->fetchObject()->nbPlaces;
+
+                //enlever les places réservées
+                $select_nb_places_reservees = "SELECT count(*) as placesReservees FROM  reservation_place,`reservation_vg` 
+                    WHERE `ID_VG` = :id_vg
+                    AND `STATU_RESA` = 2
+                    AND reservation_place.reservation_id = reservation_vg.ID_RESA";
+                $resultat = $base->prepare($select_nb_places_reservees);
+                $resultat->bindParam(':id_vg', $id);
+                $resultat->execute();
+                $placesReservees = $resultat->fetchObject()->placesReservees;
+
+                $placesDispo = $totalPlaces - $placesReservees;
                 
         
                 ?>
@@ -91,7 +109,7 @@ session_start();
                                     <h6 class="mb-0">Nombre emplacements</h6>
                                     </div>
                                     <div class="col-sm-9">
-                                    <span class="px-sm-3"><?php echo $nbrEmplacements ?></span>
+                                    <span class="px-sm-3"><?php echo $totalPlaces ?></span>
                                     </div>
                                 </div>
                                 <hr>
@@ -102,10 +120,10 @@ session_start();
                                     <div class="col-sm-9">
                                     <!-- PLACES DISPO -->
                                     <?php 
-                                    if ($nbrRestant > 0) {
+                                    if ($placesDispo > 0) {
                                         
                                         // NOMBRE DE PLACES
-                                        echo '<span style="background-color:#C7E0AF; border-radius: 15px; color:#0D6F1C;" class="py-1 px-3"><strong>'.$nbrRestant.'</strong> Places disponibles</span>';
+                                        echo '<span style="background-color:#C7E0AF; border-radius: 15px; color:#0D6F1C;" class="py-1 px-3"><strong>'.$placesDispo.'</strong> Places disponibles</span>';
 
                                         // USER connecté, bouton réservez
                                         if (isset($_SESSION['id_util'])) {

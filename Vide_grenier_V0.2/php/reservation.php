@@ -30,7 +30,6 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
         $resultat->execute();
 
         while ($ligne = $resultat->fetch()) {
-
             $label = $ligne['LABEL_VG'];
             $date = $ligne['DATE_VG'];
             $heure = $ligne['HEURE_VG'];
@@ -38,11 +37,28 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
             $nbrRestant = $ligne['NBR_RESTANT_VG'];
             $prixPlace = $ligne['PRIX_EMPLACEMENTS'];
         }
-    } catch (Exception $e) {
 
+        //Séléctionner nb total de places
+        $select_nb_places = "select count(*) as nbPlaces from places where type != '_' and type != 'x'";
+        $resultat = $base->prepare($select_nb_places);
+        $resultat->execute();
+        $totalPlaces = $resultat->fetchObject()->nbPlaces;
+
+        //enlever les places réservées
+        $select_nb_places_reservees = "SELECT count(*) as placesReservees FROM  reservation_place,`reservation_vg` 
+            WHERE `ID_VG` = :id_vg
+            AND `STATU_RESA` = 2
+            AND reservation_place.reservation_id = reservation_vg.ID_RESA";
+        $resultat = $base->prepare($select_nb_places_reservees);
+        $resultat->bindParam(':id_vg', $_GET['idVG']);
+        $resultat->execute();
+        $placesReservees = $resultat->fetchObject()->placesReservees;
+
+        $placesDispo = $totalPlaces - $placesReservees;
+
+    } catch (Exception $e) {
         die('Erreur : ' . $e->getMessage());
     } finally {
-
         $base = null; //fermeture de la connexion
     }
     ?>
@@ -56,7 +72,7 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
         <h3><?php echo $label ?></h3>
         <p>Quand? le <?php echo $date ?>, <?php echo $heure ?></p>
         <p>Où? <?php echo $addresse ?></p>
-        <p>Plus que <?php echo $nbrRestant ?> places disponibles.</p>
+        <p>Plus que <?php echo $placesDispo ?> places disponibles.</p>
 
         <!-- Légende -->
         <div class="row mx-2 mb-2">
@@ -64,18 +80,30 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
                 <h5 class="text-middle">Légende</h5>
             </div>
 
-            <div class="col bg-light rounded ml-auto text-dark border border overflow-auto" style="height:200px;">
-                <h5 class="text-middle">Panier</h5>
-                <table class="table">
-                    <thead>
-                        <td>Numéro</td>
-                        <td>Type</td>
-                        <td>Prix</td>
-                    </thead>
-                    <tbody id="liste-emplacements">
-                    </tbody>
-                </table>
+            <div class="col">
+                <div class="row bg-light rounded ml-auto text-dark border border overflow-auto" style="height:240px;">
+                    <h5 class="text-middle align-center text-center mx-auto">Panier</h5>
+                    <table class="table">
+                        <thead>
+                            <td>Numéro</td>
+                            <td>Prix (€)</td>
+                            <td>Type</td>
+                        </thead>
+                        <tbody id="liste-emplacements">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row bg-light mt-1 ml-0 rounded py-2 text-dark">
+                    <div class="col-4">Total (€)</div>
+                    <div class="col-4">
+                        <input type="text form-control" id="prixTotal" value="0.00" readonly>
+                    </div>
+                    <div class="col-4">
+                        <span class="">pour <span id="nbPlaces" class="font-weight-bold">0</span> places<span>
+                    </div>
+                </div>
             </div>
+
         </div>
 
         <div class="row mx-2 mb-2">
@@ -93,55 +121,66 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
 
             <div class="form-group">
                 <label for="mail">*Mail: </label>
+                <!-- <input type="text" class="form-control" name="mail" id="mail" placeholder="exemple@mail.com"> -->
                 <input type="text" class="form-control" name="mail" id="mail" placeholder="exemple@mail.com">
             </div>
             <div class="form-group">
                 <label for="nom">*Nom: </label>
-                <input type="text" class="form-control" name="nom" id="nom" placeholder="Dupont">
+                <!-- <input type="text" class="form-control" name="nom" id="nom" placeholder="Dupont"> -->
+                <input type="text" class="form-control" name="nom" id="nom" placeholder="Dupont" value="Dupont">
             </div>
             <div class="form-group">
                 <label for="prenom">*Prénom: </label>
-                <input type="text" class="form-control" name="prenom" id="prenom" placeholder="Jean">
+                <!-- <input type="text" class="form-control" name="prenom" id="prenom" placeholder="Jean"> -->
+                <input type="text" class="form-control" name="prenom" id="prenom" placeholder="Jean" value="Jean">
             </div>
             <div class="form-group">
             <label for="addresse">*Adresse: </label>
-            <input type="text" class="form-control" name="addresse" id="addresse" placeholder="4 avenus de l'exemple">
+            <!-- <input type="text" class="form-control" name="addresse" id="addresse" placeholder="4 avenus de l'exemple"> -->
+            <input type="text" class="form-control" name="addresse" id="addresse" placeholder="4 avenus de l'exemple" value="4 avenus de l'exemple">
             </div>
             <div>
                 <label for="postal">*Code Postal: </label>
-                <input type="text" class="form-control" name="postal" id="postal" placeholder="XXXXX">
+                <!-- <input type="text" class="form-control" name="postal" id="postal" placeholder="XXXXX"> -->
+                <input type="text" class="form-control" name="postal" id="postal" placeholder="XXXXX" value="01234">
             </div>
             <div>
                 <label for="ville">*Ville: </label>
-                <input type="text" class="form-control" name="ville" id="ville" placeholder="Saint exemple">
+                <!-- <input type="text" class="form-control" name="ville" id="ville" placeholder="Saint exemple"> -->
+                <input type="text" class="form-control" name="ville" id="ville" placeholder="Saint exemple" value="Saint exemple">
             </div>
             <div class="form-group">
                 <label for="portable">*Portable: </label>
-                <input type="text" class="form-control" name="portable" id="portable" placeholder="0XXXXXXXXX">
+                <!-- <input type="text" class="form-control" name="portable" id="portable" placeholder="0XXXXXXXXX"> -->
+                <input type="text" class="form-control" name="portable" id="portable" placeholder="0123456789" value="0123456789">
             </div>
             <div class="form-group">
                 <label for="numCNI">*N° Carte d'identité: </label>
-                <input type="text" class="form-control" name="numCNI" id="numCNI" placeholder="">
+                <!-- <input type="text" class="form-control" name="numCNI" id="numCNI" placeholder=""> -->
+                <input type="text" class="form-control" name="numCNI" id="numCNI" placeholder="A12345334" value="A12345334">
             </div>
             <div class="form-group">
                 <label for="dateCNI">*Délivrée le: </label>
-                <input type="text" class="form-control" name="dateCNI" id="dateCNI" placeholder="XX/XX/XXXX">
+                <!-- <input type="text" class="form-control" name="dateCNI" id="dateCNI" placeholder="XX/XX/XXXX"> -->
+                <input type="text" class="form-control" name="dateCNI" id="dateCNI" placeholder="XX/XX/XXXX" value="02/02/2002">
             </div>
             <div class="form-group">
                 <label for="parCNI">*Délivrée par: </label>
-                <input type="text" class="form-control" name="parCNI" id="parCNI" placeholder="Préfecture de ...">
+                <!-- <input type="text" class="form-control" name="parCNI" id="parCNI" placeholder="Préfecture de ..."> -->
+                <input type="text" class="form-control" name="parCNI" id="parCNI" placeholder="Préfecture de ..." value="Préfecture du rhône">
             </div>
             <div class="form-group">
                 <label for="immatriculation">Plaque d'immatriculation: </label>
-                <input type="text" class="form-control" name="immatriculation" id="immatriculation" placeholder="'AB-123-CD' ou '123 AB 45'">
+                <!-- <input type="text" class="form-control" name="immatriculation" id="immatriculation" placeholder="'AB-123-CD' ou '123 AB 45'"> -->
+                <input type="text" class="form-control" name="immatriculation" id="immatriculation" placeholder="'AB-123-CD' ou '123 AB 45'" value="AB-124-ER">
             </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label for="nbrEmplacement">*Nombre d'emplacements désirer: </label>
                 <input type="number" class="form-control" name="nbrEmplacement" id="nbrEmplacement" placeholder="" min="1" max="<?php echo $nbrRestant?>">
                 <span> <?php echo $prixPlace ?>€ la place.</span>
                 <span id='resultatPrix'></span>
                 
-            </div>
+            </div> -->
         </div>
 
         <!-- Col 2 - règles  -->
@@ -154,23 +193,23 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
             <p class="text-justify">Par contre, si nous sommes avertis 7 jours calendaires avant, d’un empêchement majeur de votre part, nous vous rembourserons le montant de votre réservation moins les frais de réservation et de service s'élevant à 4€.</p>
 
             <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="infoCheck">
+                <input type="checkbox" class="form-check-input" id="infoCheck" checked>
                 <label class="form-check-label text-justify" for="infoCheck">*Je certifie sur l'honneur l'exactitude des informations remplies</label>
             </div><br />
             <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="commercantCheck">
+                <input type="checkbox" class="form-check-input" id="commercantCheck" checked>
                 <label class="form-check-label text-justify" for="commercantCheck">*Je certifie sur l'honneur de ne pas être commerçant(e)</label>
             </div><br />
             <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="objetCheck">
+                <input type="checkbox" class="form-check-input" id="objetCheck" checked>
                 <label class="form-check-label text-justify" for="objetCheck">*Je certifie sur l'honneur de ne vendre que des objets personnels et usagés (Article L 310-2 du Code de commerce)</label>
             </div><br />
             <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="manifestationCheck">
+                <input type="checkbox" class="form-check-input" id="manifestationCheck" checked>
                 <label class="form-check-label text-justify" for="manifestationCheck">*Je certifie sur l'honneur de non-participation à 2 autres manifestations de même nature au cours de l’année civile. (Article R321-9 du Code pénal)</label>
             </div><br />
             <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="parkingCheck">
+                <input type="checkbox" class="form-check-input" id="parkingCheck" checked>
                 <label class="form-check-label text-justify" for="parkingCheck">*Je m'engage a laisser libre les emplacements de parking réservés à la décharge des véhicules (cf emplacements verts sur photos plus bas), à défaut je sais que je pourrai recevoir un Procès Verbal pour infraction à l'arrêté de non stationnement publié par la Mairie pour le jour de la manifestation.</label>
             </div><br />
             <div class="form-group">
@@ -192,6 +231,9 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
                 }
                 ?>
             </div>
+
+            
+            <input type="hidden" id="coords_places_reservees" name="coords_places_reservees">
         </form>
         </div>
 
@@ -222,6 +264,7 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
 
     $(document).ready(function() {
 
+        var places_reservees = [];
         var sc = $('#seat-map').seatCharts({
             rows: false,
             map: api_map_array,
@@ -247,12 +290,25 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
                 items : [
                     [ 'a', 'available',   'Emplacement 2 mètres'],
                     [ 'b', 'available',   'Emplacement 3 mètres'],
-                    [ 'x', 'available',   'Emplacement Indisponible'],
+                    [ 'x', 'available',   'Emplacement reservé'],
                 ]
             },
+            /***********************************
+            * Quand on clique sur un emplacement
+            */
             click: function () {
-                //Emplacement séléctionné, ajouter dans le panier
+                /*******************************************
+                 *  Si action == séléctionner l'emplacement
+                 */
                 if (this.status() == 'available') {
+                    //Enregistrer les coordonnées places reservés
+                    if(!places_reservees.includes(this.settings.id)){
+                        places_reservees.push(this.settings.id);
+                        let newTotal = parseFloat($('#prixTotal').val())  +  parseFloat(this.settings.data.price);
+                        $('#prixTotal').val(newTotal.toFixed(2));
+                    }
+                    $('#resaDB')[0].coords_places_reservees.value = places_reservees;
+                    //Emplacement séléctionné, ajouter dans le panier
                     var row = document.createElement("tr");
                     row.setAttribute('id', this.settings.id);
                     $("#liste-emplacements").append(row);
@@ -266,8 +322,18 @@ if (isset($_SESSION["id_util"]) && isset($_GET['idVG'])) {
                     td3.innerHTML = this.settings.data.type;
                     row.append(td3);
                     return 'selected';
-                //Emplacement déselectionné, enlever du panier
+                
+                /*******************************************
+                 *  Si action == désélectionner l'emplacement
+                 */
                 } else if (this.status() == 'selected') {
+                    //Supprimer les coordonnées places reservés
+                    if(places_reservees.includes(this.settings.id)){
+                        places_reservees.splice(places_reservees.indexOf(this.settings.id), 1);
+                        let newTotal = parseFloat($('#prixTotal').val())  -  parseFloat(this.settings.data.price);
+                        $('#prixTotal').val(newTotal.toFixed(2));
+                    }
+                    $('#resaDB')[0].coords_places_reservees.value = places_reservees;
                     $('#'+this.settings.id).remove();
                     return 'available';
                 } else if (this.status() == 'unavailable') {

@@ -127,9 +127,14 @@ $(document).ready(function () {
     });
 
 
-    // Test du form de reservation
+    /*********************************************
+     * 
+     * Formulaire de réservation d'un Vide grenier
+     * 
+     */
     $("#resaDB").submit(function(event) {
 
+        var coords_places_reservees = $("#coords_places_reservees").val();
         var mail = $("#mail").val();
         var nom = $("#nom").val();
         var prenom = $("#prenom").val();
@@ -141,7 +146,7 @@ $(document).ready(function () {
         var dateCNI = $("#dateCNI").val();
         var parCNI = $("#parCNI").val();
         var immatriculation = $("#immatriculation").val();
-        var nbrEmplacement = $("#nbrEmplacement").val();
+        // var nbrEmplacement = $("#nbrEmplacement").val();
         var infoCheck = $("#infoCheck").prop('checked');
         var commercantCheck = $("#commercantCheck").prop('checked');
         var objetCheck = $("#objetCheck").prop('checked');
@@ -149,9 +154,11 @@ $(document).ready(function () {
         var parkingCheck = $("#parkingCheck").prop('checked');
         var remarque = $("#remarque").val();
         
-        if (mail == "" || nom == "" || prenom == "" || addresse == "" || codePostal == "" || ville == "" || portable == "" || numCNI == "" || dateCNI == "" || parCNI == "" || nbrEmplacement == ""  || infoCheck == false  || commercantCheck == false || objetCheck == false || manifestationCheck == false || parkingCheck == false  ) {
-
+        if (mail == "" || nom == "" || prenom == "" || addresse == "" || codePostal == "" || ville == "" || portable == "" || numCNI == "" || dateCNI == "" || parCNI == "" || infoCheck == false  || commercantCheck == false || objetCheck == false || manifestationCheck == false || parkingCheck == false  ) {
             $("#erreurReservation").html("*Veuillez remplir tous les champs requis");
+            return false;
+        } else if (coords_places_reservees.length == 0){
+            $("#erreurReservation").html("*Veuillez choisir au moins un emplacement");
             return false;
         } else if (mail.length > 50 || regMail.test(mail) == false){
 
@@ -189,10 +196,10 @@ $(document).ready(function () {
 
             $("#erreurReservation").html("*Veuillez vérifier votre plaque d'immatriculation.");
             return false;
-        }  else if (nbrEmplacement.isInteger == false){
+        // }  else if (nbrEmplacement.isInteger == false){
 
-            $("#erreurReservation").html("*Veuillez vérifier votre nombre de places.");
-            return false;
+        //     $("#erreurReservation").html("*Veuillez vérifier votre nombre de places.");
+        //     return false;
         } else if (remarque != "" && remarque.length > 150){
 
             $("#erreurReservation").html("*Veuillez raccourcir votre déscription (" + remarque.length + "/150 caractères maximum).");
@@ -245,14 +252,14 @@ $(document).ready(function () {
     });
 
     // Prix dynamique
-    $( "#nbrEmplacement" ).change(function() {
+    // $( "#nbrEmplacement" ).change(function() {
         
-        var nbr = parseInt($("#nbrEmplacement").val());
-        var prix = parseInt($("#prixJS").val());
-        var totalPrix = nbr*prix
+    //     var nbr = parseInt($("#nbrEmplacement").val());
+    //     var prix = parseInt($("#prixJS").val());
+    //     var totalPrix = nbr*prix
 
-        $("#resultatPrix").html("Soit un total de " + totalPrix + "€.");
-      });
+    //     $("#resultatPrix").html("Soit un total de " + totalPrix + "€.");
+    //   });
 
 
     //   Test form Programmation VG
