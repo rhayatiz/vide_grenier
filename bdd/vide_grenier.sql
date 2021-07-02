@@ -1,54 +1,34 @@
--- phpMyAdmin SQL Dump
--- version 5.0.2
--- https://www.phpmyadmin.net/
---
--- Hôte : 127.0.0.1
--- Généré le : ven. 21 mai 2021 à 16:14
--- Version du serveur :  10.4.13-MariaDB
--- Version de PHP : 7.4.7
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
 --
 -- Base de données : `vide_grenier`
 --
  create database IF NOT EXISTS vide_grenier_v1_zr_hp;
- use vide_grenier_v1_zr_hp;
-
-
+ USE vide_grenier_v1_zr_hp;
 
 --
 -- Drop pour clear la BDD
 --
 
-DROP TABLE IF EXISTS vide_grenier_v1_zr_hp_videgrenier;
-DROP TABLE IF EXISTS vide_grenier_v1_zr_hp_utilisateur;
-DROP TABLE IF EXISTS vide_grenier_v1_zr_hp_statuts;
-DROP TABLE IF EXISTS vide_grenier_v1_zr_hp_reservation_vg;
-DROP TABLE IF EXISTS vide_grenier_v1_zr_hp_mailing_list ;
+DROP TABLE IF EXISTS videgrenier;
+DROP TABLE IF EXISTS utilisateur;
+DROP TABLE IF EXISTS statuts;
+DROP TABLE IF EXISTS reservation_vg;
+DROP TABLE IF EXISTS mailing_list ;
 
-DELIMITER $$
+
 --
 -- Procédures
 --
+DELIMITER $$
 
 DROP PROCEDURE IF EXISTS add_mailing_list$$
 DROP PROCEDURE IF EXISTS remove_mailing_list$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `add_mailing_list` (IN `mail` VARCHAR(100))  BEGIN
-	INSERT INTO vide_grenier_v1_zr_hp_mailing_list(MAIL_ML) VALUES (mail);
+	INSERT INTO mailing_list(MAIL_ML) VALUES (mail);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `remove_mailing_list` (IN `mail` VARCHAR(100))  BEGIN
-	DELETE FROM vide_grenier_v1_zr_hp_mailing_list WHERE MAIL_ML = mail;
+	DELETE FROM mailing_list WHERE MAIL_ML = mail;
 END$$
 
 DELIMITER ;
@@ -59,7 +39,7 @@ DELIMITER ;
 -- Structure de la table `mailing_list`
 --
 
-CREATE TABLE `vide_grenier_v1_zr_hp_mailing_list` (
+CREATE TABLE `mailing_list` (
   `ID_ML` int(11) PRIMARY KEY NOT NULL AUTO_INCREMENT, 
   `MAIL_ML` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -68,7 +48,7 @@ CREATE TABLE `vide_grenier_v1_zr_hp_mailing_list` (
 -- Déchargement des données de la table `mailing_list`
 --
 
-INSERT INTO `vide_grenier_v1_zr_hp_mailing_list` (`ID_ML`, `MAIL_ML`) VALUES
+INSERT INTO `mailing_list` (`ID_ML`, `MAIL_ML`) VALUES
 (4, 'testTrigger@test.fr'),
 (7, 'consectetuer.ipsum@laoreetipsum.net'),
 (8, 'erat.vel@fermentumarcu.org'),
@@ -203,7 +183,7 @@ INSERT INTO `vide_grenier_v1_zr_hp_mailing_list` (`ID_ML`, `MAIL_ML`) VALUES
 -- Structure de la table `reservation_vg`
 --
 
-CREATE TABLE `vide_grenier_v1_zr_hp_reservation_vg` (
+CREATE TABLE `reservation_vg` (
   `ID_RESA` int(11) PRIMARY KEY  NOT NULL AUTO_INCREMENT,
   `ID_VG` int(11) NOT NULL,
   `ID_UTIL` int(11) NOT NULL,
@@ -227,7 +207,7 @@ CREATE TABLE `vide_grenier_v1_zr_hp_reservation_vg` (
 -- Déchargement des données de la table `reservation_vg`
 --
 
-INSERT INTO `vide_grenier_v1_zr_hp_reservation_vg` (`ID_RESA`, `ID_VG`, `ID_UTIL`, `NOM_RESA`, `PRENOM_RESA`, `MAIL_RESA`, `ADDRESSE_RESA`, `CODE_POSTAL_RESA`, `VILLE_RESA`, `PORTABLE_RESA`, `CNI_RESA`, `DELIVRE_CNI_RESA`, `PAR_CNI_RESA`, `IMMATRICULATION_RESA`, `NBR_RESA`, `INFO_RESA`, `STATU_RESA`) VALUES
+INSERT INTO `reservation_vg` (`ID_RESA`, `ID_VG`, `ID_UTIL`, `NOM_RESA`, `PRENOM_RESA`, `MAIL_RESA`, `ADDRESSE_RESA`, `CODE_POSTAL_RESA`, `VILLE_RESA`, `PORTABLE_RESA`, `CNI_RESA`, `DELIVRE_CNI_RESA`, `PAR_CNI_RESA`, `IMMATRICULATION_RESA`, `NBR_RESA`, `INFO_RESA`, `STATU_RESA`) VALUES
 (2, 2, 2, 'mom', 'non', 'adresse@mail.fr', '123 avenue exemple', '12333', 'Lyon', '0123456789', 'ZAEP1EK1E3O1', '12/12/1990', 'Lyon', '123 AB 11', 6, NULL, 2),
 (3, 3, 2, 'nom', 'prenom', 'a@b.da', '23232', '69123', 'Saint', '0123456789', '31209312P', '01/01/2000', 'lyon', '123 AB 12', 1, NULL, 3),
 (4, 2, 2, 'nom', 'prenom', 'aa@ee.fr', '4 aa', '6900', 'sa', '0123456789', 'aaa123a46', '01/01/2000', 'rhone', 'aa-222-ac', 2, NULL, 3);
@@ -238,7 +218,7 @@ INSERT INTO `vide_grenier_v1_zr_hp_reservation_vg` (`ID_RESA`, `ID_VG`, `ID_UTIL
 -- Structure de la table `statuts`
 --
 
-CREATE TABLE `vide_grenier_v1_zr_hp_statuts` (
+CREATE TABLE `statuts` (
   `ID_STATUTS` int(11) PRIMARY KEY  NOT NULL AUTO_INCREMENT,
   `LABEL_STATUTS` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -247,7 +227,7 @@ CREATE TABLE `vide_grenier_v1_zr_hp_statuts` (
 -- Déchargement des données de la table `statuts`
 --
 
-INSERT INTO `vide_grenier_v1_zr_hp_statuts` (`ID_STATUTS`, `LABEL_STATUTS`) VALUES
+INSERT INTO `statuts` (`ID_STATUTS`, `LABEL_STATUTS`) VALUES
 (1, 'En attente'),
 (2, 'Validée'),
 (3, 'Refusée');
@@ -258,7 +238,7 @@ INSERT INTO `vide_grenier_v1_zr_hp_statuts` (`ID_STATUTS`, `LABEL_STATUTS`) VALU
 -- Structure de la table `utilisateur`
 --
 
-CREATE TABLE `vide_grenier_v1_zr_hp_utilisateur` (
+CREATE TABLE `utilisateur` (
   `ID_UTIL` int(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `MAIL_UTIL` varchar(50) NOT NULL,
   `MDP_UTIL` varchar(30) NOT NULL,
@@ -273,7 +253,7 @@ CREATE TABLE `vide_grenier_v1_zr_hp_utilisateur` (
 -- Déchargement des données de la table `utilisateur`
 --
 
-INSERT INTO `vide_grenier_v1_zr_hp_utilisateur` (`ID_UTIL`, `MAIL_UTIL`, `MDP_UTIL`, `NOM_UTIL`, `PRENOM_UTIL`, `TEL_UTIL`, `DESC_UTIL`, `ADMIN_UTIL`) VALUES
+INSERT INTO `utilisateur` (`ID_UTIL`, `MAIL_UTIL`, `MDP_UTIL`, `NOM_UTIL`, `PRENOM_UTIL`, `TEL_UTIL`, `DESC_UTIL`, `ADMIN_UTIL`) VALUES
 (2, 'adresse@mail.fr', 'aaaaaa', 'Dupiont', 'Rogere', '0222222222', 'dazdazdaz', NULL),
 (6, 'admin@admin.fr', 'xxxxxx', 'Admin', 'Alvin', NULL, 'Admin du site', 1),
 (7, 'dee@dee.com', 'eeeeee', 'Ben', 'Roger', NULL, 'Une description', NULL),
@@ -388,11 +368,11 @@ INSERT INTO `vide_grenier_v1_zr_hp_utilisateur` (`ID_UTIL`, `MAIL_UTIL`, `MDP_UT
 -- Déclencheurs `utilisateur`
 --
 DELIMITER $$
-CREATE TRIGGER `inscription_mailing_auto` AFTER INSERT ON `vide_grenier_v1_zr_hp_utilisateur` FOR EACH ROW BEGIN
-    
+
+DROP TRIGGER IF EXISTS inscription_mailing_auto$$
+CREATE TRIGGER `inscription_mailing_auto` AFTER INSERT ON `utilisateur` FOR EACH ROW BEGIN   
   
-	INSERT INTO vide_grenier_v1_zr_hp_mailing_list (MAIL_ML) VALUE(NEW.MAIL_UTIL);
-    
+	INSERT INTO mailing_list (MAIL_ML) VALUE(NEW.MAIL_UTIL);
     
 END
 $$
@@ -404,7 +384,7 @@ DELIMITER ;
 -- Structure de la table `videgrenier`
 --
 
-CREATE TABLE `vide_grenier_v1_zr_hp_videgrenier` (
+CREATE TABLE `videgrenier` (
   `ID_VG` int(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `LABEL_VG` varchar(50) DEFAULT NULL,
   `DATE_VG` varchar(11) DEFAULT NULL,
@@ -419,17 +399,7 @@ CREATE TABLE `vide_grenier_v1_zr_hp_videgrenier` (
 -- Déchargement des données de la table `videgrenier`
 --
 
-INSERT INTO `vide_grenier_v1_zr_hp_videgrenier` (`ID_VG`, `LABEL_VG`, `DATE_VG`, `HEURE_VG`, `ADDRESSE_VG`, `NBR_EMPLACEMENTS`, `NBR_RESTANT_VG`, `PRIX_EMPLACEMENTS`) VALUES
+INSERT INTO `videgrenier` (`ID_VG`, `LABEL_VG`, `DATE_VG`, `HEURE_VG`, `ADDRESSE_VG`, `NBR_EMPLACEMENTS`, `NBR_RESTANT_VG`, `PRIX_EMPLACEMENTS`) VALUES
 (2, 'Vide-grenier annuel 2016', '03/07/2016', 'de 6h à 16h', 'Esplanade de la Gravière, Avenue De Limburg., Sainte-foy-lès-lyon 69110', 100, 59, '20'),
 (3, 'Test vide-grenier par Admin', '10/02/9999', 'de 4h à 23h', 'Un exemple random, 44444 Ville', 102, 95, '300'),
 (5, 'Vide grenier printemps', '01/04/2021', 'de 08h à 16h', '52 Place des reines, 69004 Lyon', 200, 0, '35');
-
-
-
-
-
-
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
