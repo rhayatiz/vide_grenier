@@ -122,22 +122,6 @@
     FOREIGN KEY (place_id) REFERENCES places(id)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-  -- --
-  -- -- Index pour la table `reservation_place`
-  -- --
-  -- ALTER TABLE `reservation_place`
-  --   ADD KEY `fk_reservation_place_places` (`place_id`),
-  --   ADD KEY `fk_reservation_place_reservation` (`reservation_id`);
-
-  -- -- --------------------------------------------------------
-  -- -- Clés étrangères table reservation_place
-  -- -- --------------------------------------------------------
-  -- ALTER TABLE `reservation_place`
-  --   ADD CONSTRAINT `fk_reservation_place_places` FOREIGN KEY (`place_id`) REFERENCES `places` (`id`),
-  --   ADD CONSTRAINT `fk_reservation_place_reservation` FOREIGN KEY (`reservation_id`) REFERENCES `reservation_vg` (`ID_RESA`);
-  -- COMMIT;
-
-
   -- ---------------------------------------------
   -- trigger `inscription_mailing_auto`
   -- ---------------------------------------------
