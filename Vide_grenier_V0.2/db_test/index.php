@@ -5,7 +5,7 @@
         echo "</pre>";
     }
 
-    $base = new PDO('mysql:host=127.0.0.1; dbname=vide_grenier', 'root', '');
+    $base = new PDO('mysql:host=127.0.0.1; dbname=vide_grenier_v1_zr_hp', 'root', '');
     $base->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $base->exec("SET NAMES utf8");
 
@@ -23,7 +23,7 @@
     echo "Select compte compte_test@mail.fr";
     $request = $base->prepare("SELECT * FROM utilisateur WHERE MAIL_UTIL = 'compte_test@mail.fr'");
     $request->execute();
-    $result = $request->fetch();
+    $result = $request->fetchObject();
     dd($result);
 
 
@@ -33,10 +33,25 @@
     $request->execute();
 
     echo "<br>Vérification avec select compte compte_test@mail.fr";
+    echo "<br> Resultat :";
     $request = $base->prepare("SELECT * FROM utilisateur WHERE MAIL_UTIL = 'compte_test@mail.fr'");
     $request->execute();
     $result = $request->fetch();
     dd($result);
+
+
+    /**
+     * Places
+     */
+    echo "<hr>";
+    echo "<br>Sélectionner une place à partir de ses coordonnées (coords) : 1_1";
+    $request = $base->prepare("SELECT * FROM places WHERE coords = :coords");
+    $coord = '1_41';
+    $request->bindParam(':coords', $coord);
+    $request->execute();
+    $result = $request->fetchObject();
+    dd($result);
+
 
 
 ?>
