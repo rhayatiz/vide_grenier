@@ -1,405 +1,535 @@
---
--- Base de données : `vide_grenier`
---
- create database IF NOT EXISTS vide_grenier_v1_zr_hp;
- USE vide_grenier_v1_zr_hp;
+  -- --------------------------------------------------
+  -- --  Créer la bdd vide_grenier_v1_zr_hp
+  -- --------------------------------------------------
+  create database IF NOT EXISTS vide_grenier_v1_zr_hp;
+  USE vide_grenier_v1_zr_hp;
 
---
--- Drop pour clear la BDD
---
-
-DROP TABLE IF EXISTS videgrenier;
-DROP TABLE IF EXISTS utilisateur;
-DROP TABLE IF EXISTS statuts;
-DROP TABLE IF EXISTS reservation_vg;
-DROP TABLE IF EXISTS mailing_list ;
-
-
---
--- Procédures
---
-DELIMITER $$
-
-DROP PROCEDURE IF EXISTS add_mailing_list$$
-DROP PROCEDURE IF EXISTS remove_mailing_list$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_mailing_list` (IN `mail` VARCHAR(100))  BEGIN
-	INSERT INTO mailing_list(MAIL_ML) VALUES (mail);
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `remove_mailing_list` (IN `mail` VARCHAR(100))  BEGIN
-	DELETE FROM mailing_list WHERE MAIL_ML = mail;
-END$$
-
-DELIMITER ;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `mailing_list`
---
-
-CREATE TABLE `mailing_list` (
-  `ID_ML` int(11) PRIMARY KEY NOT NULL AUTO_INCREMENT, 
-  `MAIL_ML` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Déchargement des données de la table `mailing_list`
---
-
-INSERT INTO `mailing_list` (`ID_ML`, `MAIL_ML`) VALUES
-(4, 'testTrigger@test.fr'),
-(7, 'consectetuer.ipsum@laoreetipsum.net'),
-(8, 'erat.vel@fermentumarcu.org'),
-(9, 'imperdiet.ullamcorper.Duis@euismodest.ca'),
-(10, 'mus.Proin.vel@tristiquepharetra.co.uk'),
-(11, 'et.ultrices@interdumCurabitur.org'),
-(12, 'interdum.Nunc@lectusjusto.co.uk'),
-(13, 'cursus.et.eros@Sedcongueelit.edu'),
-(14, 'vitae@luctusvulputatenisi.edu'),
-(15, 'eget.venenatis@sit.org'),
-(16, 'consectetuer@tortornibh.com'),
-(17, 'nulla.Integer@justo.edu'),
-(18, 'Nunc.pulvinar@augue.com'),
-(19, 'placerat.Cras@tellusPhaselluselit.org'),
-(20, 'erat.eget.tincidunt@molestiein.net'),
-(21, 'diam.Sed@enimgravidasit.edu'),
-(22, 'porttitor.eros@idmagnaet.org'),
-(23, 'egestas@eu.com'),
-(24, 'dictum@malesuadaaugueut.co.uk'),
-(25, 'dictum.Phasellus.in@intempus.com'),
-(26, 'tempus@turpis.edu'),
-(27, 'non@sit.net'),
-(28, 'non@semconsequatnec.org'),
-(29, 'amet@facilisis.org'),
-(30, 'risus@ipsumleo.edu'),
-(31, 'in.magna.Phasellus@Nunc.org'),
-(32, 'dui@semvitaealiquam.net'),
-(33, 'ultrices.iaculis.odio@maurisInteger.com'),
-(34, 'leo.in@lectus.co.uk'),
-(35, 'dolor.sit@Suspendissealiquet.org'),
-(36, 'Curabitur.vel.lectus@laciniamattisInteger.com'),
-(37, 'metus@necmetusfacilisis.edu'),
-(38, 'consectetuer@vitaemauris.net'),
-(39, 'sem.egestas.blandit@parturient.org'),
-(40, 'nec.urna@perconubianostra.com'),
-(41, 'orci.Ut.sagittis@nunc.edu'),
-(42, 'ut.cursus@elitNullafacilisi.co.uk'),
-(43, 'faucibus.ut@mollisnon.co.uk'),
-(44, 'Cum.sociis.natoque@Integer.co.uk'),
-(45, 'est@risusNulla.com'),
-(46, 'urna@arcu.com'),
-(47, 'tincidunt@Pellentesquetincidunttempus.edu'),
-(48, 'enim.consequat.purus@sem.com'),
-(49, 'non@eleifendnunc.org'),
-(50, 'Maecenas@consectetuereuismod.org'),
-(51, 'felis.orci.adipiscing@vulputatemaurissagittis.edu'),
-(52, 'mauris.a@mollis.org'),
-(53, 'mi@utpharetrased.co.uk'),
-(54, 'lobortis@tristiquesenectus.edu'),
-(55, 'tincidunt@sit.org'),
-(56, 'arcu@dapibusid.co.uk'),
-(57, 'primis.in.faucibus@urnaconvalliserat.co.uk'),
-(58, 'leo.Morbi.neque@metusIn.ca'),
-(59, 'eu.nulla@turpis.co.uk'),
-(60, 'et.ultrices@Aliquamrutrumlorem.net'),
-(61, 'et@Sedneque.co.uk'),
-(62, 'sem@turpis.net'),
-(63, 'Ut@atlibero.com'),
-(64, 'dictum@enim.com'),
-(65, 'rutrum.non.hendrerit@sollicitudin.co.uk'),
-(66, 'amet@sedtortorInteger.com'),
-(67, 'netus.et@nonummyut.edu'),
-(68, 'dapibus.quam.quis@elitfermentumrisus.co.uk'),
-(69, 'vulputate.risus.a@ultrices.org'),
-(70, 'eu.arcu.Morbi@orci.edu'),
-(71, 'eu.enim@disparturient.co.uk'),
-(72, 'eget.massa@ac.net'),
-(73, 'Cras.dolor@eleifendegestasSed.ca'),
-(74, 'nunc.interdum.feugiat@Quisqueimperdieterat.edu'),
-(75, 'vitae.risus@Nullamenim.net'),
-(76, 'Integer.aliquam.adipiscing@ornare.com'),
-(77, 'ac.turpis@Donectempor.edu'),
-(78, 'et.rutrum@massa.net'),
-(79, 'Cras.lorem.lorem@ipsum.ca'),
-(80, 'nec.leo@malesuada.co.uk'),
-(81, 'neque@Nullaaliquet.com'),
-(82, 'Mauris@dignissim.com'),
-(83, 'sed.sem.egestas@antebibendumullamcorper.ca'),
-(84, 'aliquet.molestie.tellus@urnajustofaucibus.com'),
-(85, 'Nam.interdum.enim@inconsectetueripsum.net'),
-(86, 'Nulla.tincidunt.neque@habitantmorbi.net'),
-(87, 'Ut.tincidunt@dignissimpharetraNam.ca'),
-(88, 'Duis@tinciduntorciquis.net'),
-(89, 'elit.Etiam@NullainterdumCurabitur.co.uk'),
-(90, 'neque.pellentesque@velit.com'),
-(91, 'a.felis.ullamcorper@facilisisSuspendisse.edu'),
-(92, 'nec.cursus@at.edu'),
-(93, 'ultrices@maurisrhoncusid.edu'),
-(94, 'Donec@anteNunc.edu'),
-(95, 'eget.magna.Suspendisse@Vivamussit.com'),
-(96, 'elit.Etiam@egetipsumSuspendisse.com'),
-(97, 'elit.pellentesque@Duis.com'),
-(98, 'mi.ac.mattis@dictum.co.uk'),
-(99, 'in.magna@amet.co.uk'),
-(100, 'nec@feugiatSed.co.uk'),
-(101, 'Etiam.vestibulum.massa@VivamusnisiMauris.co.uk'),
-(102, 'amet.orci@pede.ca'),
-(103, 'sed.orci.lobortis@maurisSuspendissealiquet.com'),
-(104, 'lacus.Cras@duinec.ca'),
-(105, 'enim.Etiam@Duisdignissimtempor.ca'),
-(106, 'non.lacinia.at@arcuSed.com'),
-(107, 'miyazaki1@yopmail.com'),
-(108, 'mlolap3@yopmail.com'),
-(111, 'zakaria@mail.fr'),
-(112, 'aa@gga.fr'),
-(114, 'hello@a.f'),
-(116, 'compte_test@mail.fr'),
-(117, 'compte_test@mail.fr'),
-(118, 'compte_test@mail.fr'),
-(119, 'compte_test@mail.fr'),
-(120, 'compte_test@mail.fr'),
-(121, 'compte_test@mail.fr'),
-(122, 'compte_test@mail.fr'),
-(123, 'compte_test@mail.fr'),
-(124, 'compte_test@mail.fr'),
-(125, 'compte_test@mail.fr'),
-(126, 'compte_test@mail.fr'),
-(127, 'compte_test@mail.fr'),
-(128, 'compte_test@mail.fr'),
-(129, 'compte_test@mail.fr'),
-(130, 'compte_test@mail.fr'),
-(131, 'compte_test@mail.fr'),
-(132, 'compte_test@mail.fr'),
-(133, 'compte_test@mail.fr'),
-(134, 'compte_test@mail.fr'),
-(135, 'compte_test@mail.fr'),
-(136, 'compte_test@mail.fr');
-
--- --------------------------------------------------------
-
---
--- Structure de la table `reservation_vg`
---
-
-CREATE TABLE `reservation_vg` (
-  `ID_RESA` int(11) PRIMARY KEY  NOT NULL AUTO_INCREMENT,
-  `ID_VG` int(11) NOT NULL,
-  `ID_UTIL` int(11) NOT NULL,
-  `NOM_RESA` varchar(50) NOT NULL,
-  `PRENOM_RESA` varchar(50) NOT NULL,
-  `MAIL_RESA` varchar(50) NOT NULL,
-  `ADDRESSE_RESA` varchar(100) NOT NULL,
-  `CODE_POSTAL_RESA` varchar(6) NOT NULL,
-  `VILLE_RESA` varchar(50) NOT NULL,
-  `PORTABLE_RESA` varchar(15) DEFAULT NULL,
-  `CNI_RESA` varchar(12) NOT NULL,
-  `DELIVRE_CNI_RESA` varchar(10) NOT NULL,
-  `PAR_CNI_RESA` varchar(50) NOT NULL,
-  `IMMATRICULATION_RESA` varchar(10) NOT NULL,
-  `NBR_RESA` int(11) NOT NULL,
-  `INFO_RESA` varchar(150) DEFAULT NULL,
-  `STATU_RESA` int(11) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Déchargement des données de la table `reservation_vg`
---
-
-INSERT INTO `reservation_vg` (`ID_RESA`, `ID_VG`, `ID_UTIL`, `NOM_RESA`, `PRENOM_RESA`, `MAIL_RESA`, `ADDRESSE_RESA`, `CODE_POSTAL_RESA`, `VILLE_RESA`, `PORTABLE_RESA`, `CNI_RESA`, `DELIVRE_CNI_RESA`, `PAR_CNI_RESA`, `IMMATRICULATION_RESA`, `NBR_RESA`, `INFO_RESA`, `STATU_RESA`) VALUES
-(2, 2, 2, 'mom', 'non', 'adresse@mail.fr', '123 avenue exemple', '12333', 'Lyon', '0123456789', 'ZAEP1EK1E3O1', '12/12/1990', 'Lyon', '123 AB 11', 6, NULL, 2),
-(3, 3, 2, 'nom', 'prenom', 'a@b.da', '23232', '69123', 'Saint', '0123456789', '31209312P', '01/01/2000', 'lyon', '123 AB 12', 1, NULL, 3),
-(4, 2, 2, 'nom', 'prenom', 'aa@ee.fr', '4 aa', '6900', 'sa', '0123456789', 'aaa123a46', '01/01/2000', 'rhone', 'aa-222-ac', 2, NULL, 3);
-
--- --------------------------------------------------------
-
---
--- Structure de la table `statuts`
---
-
-CREATE TABLE `statuts` (
-  `ID_STATUTS` int(11) PRIMARY KEY  NOT NULL AUTO_INCREMENT,
-  `LABEL_STATUTS` varchar(15) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Déchargement des données de la table `statuts`
---
-
-INSERT INTO `statuts` (`ID_STATUTS`, `LABEL_STATUTS`) VALUES
-(1, 'En attente'),
-(2, 'Validée'),
-(3, 'Refusée');
-
--- --------------------------------------------------------
-
---
--- Structure de la table `utilisateur`
---
-
-CREATE TABLE `utilisateur` (
-  `ID_UTIL` int(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  `MAIL_UTIL` varchar(50) NOT NULL,
-  `MDP_UTIL` varchar(30) NOT NULL,
-  `NOM_UTIL` varchar(50) DEFAULT NULL,
-  `PRENOM_UTIL` varchar(50) DEFAULT NULL,
-  `TEL_UTIL` varchar(15) DEFAULT NULL,
-  `DESC_UTIL` varchar(280) DEFAULT NULL,
-  `ADMIN_UTIL` tinyint(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Déchargement des données de la table `utilisateur`
---
-
-INSERT INTO `utilisateur` (`ID_UTIL`, `MAIL_UTIL`, `MDP_UTIL`, `NOM_UTIL`, `PRENOM_UTIL`, `TEL_UTIL`, `DESC_UTIL`, `ADMIN_UTIL`) VALUES
-(2, 'adresse@mail.fr', 'aaaaaa', 'Dupiont', 'Rogere', '0222222222', 'dazdazdaz', NULL),
-(6, 'admin@admin.fr', 'xxxxxx', 'Admin', 'Alvin', NULL, 'Admin du site', 1),
-(7, 'dee@dee.com', 'eeeeee', 'Ben', 'Roger', NULL, 'Une description', NULL),
-(10, 'testTrigger@test.fr', 'eeeeee', NULL, NULL, NULL, NULL, NULL),
-(11, 'ozzaxazxujz@azxoj.fr', 'vvvvvv', NULL, NULL, NULL, NULL, NULL),
-(12, 'riku@chat.fr', 'chatpo', 'Riku', NULL, '0222222222', NULL, 1),
-(13, 'consectetuer.ipsum@laoreetipsum.net', 'turpis.', 'Wolf', 'Kato', '0274604684', 'ante. Maecenas mi felis, adipiscing fringilla, porttitor', NULL),
-(14, 'erat.vel@fermentumarcu.org', 'eu', 'Kirk', 'Elijah', '0357637435', 'neque pellentesque massa lobortis ultrices. Vivamus rhoncus. Donec', NULL),
-(15, 'imperdiet.ullamcorper.Duis@euismodest.ca', 'aliquet', 'Moore', 'Travis', '0593947317', 'fermentum vel, mauris. Integer sem elit, pharetra ut,', NULL),
-(16, 'mus.Proin.vel@tristiquepharetra.co.uk', 'Mauris', 'Camacho', 'Ryan', '0655423569', 'enim commodo hendrerit. Donec porttitor', NULL),
-(17, 'et.ultrices@interdumCurabitur.org', 'lacus', 'Gregory', 'Illiana', '0894925417', 'sollicitudin a, malesuada id, erat. Etiam', NULL),
-(18, 'interdum.Nunc@lectusjusto.co.uk', 'odio.', 'David', 'Chelsea', '0169555241', 'eget nisi dictum augue malesuada malesuada.', NULL),
-(19, 'cursus.et.eros@Sedcongueelit.edu', 'elit.', 'Cantrell', 'Lucy', '0196586932', 'eleifend nec, malesuada ut, sem. Nulla', NULL),
-(20, 'vitae@luctusvulputatenisi.edu', 'imperdiet', 'Orr', 'Dara', '0177939115', 'ligula. Nullam enim. Sed nulla ante,', NULL),
-(21, 'eget.venenatis@sit.org', 'amet', 'Becker', 'Lila', '0249147371', 'nascetur ridiculus mus. Proin vel nisl. Quisque fringilla', NULL),
-(22, 'consectetuer@tortornibh.com', 'lorem', 'Giles', 'Howard', '0704483664', 'aliquet libero. Integer in magna. Phasellus dolor elit, pellentesque a,', NULL),
-(23, 'nulla.Integer@justo.edu', 'vitae', 'Campos', 'Hammett', '0310766555', 'urna. Nullam lobortis quam a felis ullamcorper viverra. Maecenas', NULL),
-(24, 'Nunc.pulvinar@augue.com', 'sem', 'Cotton', 'Rafael', '0235108793', 'id nunc interdum feugiat. Sed nec metus facilisis lorem tristique', NULL),
-(25, 'placerat.Cras@tellusPhaselluselit.org', 'Nulla', 'Finch', 'Jayme', '0242033877', 'sem, consequat nec, mollis vitae, posuere at, velit.', NULL),
-(26, 'erat.eget.tincidunt@molestiein.net', 'diam.', 'Wooten', 'Jonas', '0689753177', 'risus. Nunc ac sem ut dolor dapibus gravida. Aliquam', NULL),
-(27, 'diam.Sed@enimgravidasit.edu', 'eros', 'Sykes', 'Yasir', '0715437560', 'eu nibh vulputate mauris sagittis placerat.', NULL),
-(28, 'porttitor.eros@idmagnaet.org', 'enim.', 'Mckee', 'Eden', '0971821933', 'enim. Etiam gravida molestie arcu. Sed eu nibh vulputate mauris', NULL),
-(29, 'egestas@eu.com', 'Donec', 'Lara', 'Zia', '0506930965', 'Cras interdum. Nunc sollicitudin commodo ipsum. Suspendisse non leo.', NULL),
-(30, 'dictum@malesuadaaugueut.co.uk', 'cursus', 'Berry', 'Dale', '0745314567', 'egestas rhoncus. Proin nisl sem, consequat', NULL),
-(31, 'dictum.Phasellus.in@intempus.com', 'non,', 'Haynes', 'Allegra', '0147073442', 'Aenean sed pede nec ante blandit viverra. Donec', NULL),
-(32, 'tempus@turpis.edu', 'in', 'Lowe', 'Seth', '0765878698', 'erat volutpat. Nulla facilisis. Suspendisse commodo tincidunt nibh.', NULL),
-(33, 'non@sit.net', 'magna', 'Cox', 'Laith', '0475639313', 'hendrerit consectetuer, cursus et, magna. Praesent interdum ligula', NULL),
-(34, 'non@semconsequatnec.org', 'sem,', 'Dejesus', 'Ryan', '0461938734', 'Cras convallis convallis dolor. Quisque tincidunt pede', NULL),
-(35, 'amet@facilisis.org', 'quis,', 'Hammond', 'Carlos', '0280016180', 'fringilla. Donec feugiat metus sit amet ante. Vivamus', NULL),
-(36, 'risus@ipsumleo.edu', 'orci,', 'Robinson', 'Upton', '0383621525', 'neque. Nullam ut nisi a odio semper cursus. Integer mollis.', NULL),
-(37, 'in.magna.Phasellus@Nunc.org', 'mauris,', 'Alvarez', 'Roth', '0985909665', 'velit. Cras lorem lorem, luctus ut, pellentesque eget, dictum placerat,', NULL),
-(38, 'dui@semvitaealiquam.net', 'pede', 'Merritt', 'Kay', '0536939596', 'In condimentum. Donec at arcu. Vestibulum ante ipsum', NULL),
-(39, 'ultrices.iaculis.odio@maurisInteger.com', 'urna.', 'Poole', 'Jerome', '0899457480', 'Sed id risus quis diam luctus', NULL),
-(40, 'leo.in@lectus.co.uk', 'ornare', 'Rodriquez', 'Violet', '0794532368', 'tempor lorem, eget mollis lectus pede et risus. Quisque', NULL),
-(41, 'dolor.sit@Suspendissealiquet.org', 'magna.', 'Dixon', 'David', '0632004742', 'Morbi quis urna. Nunc quis arcu vel quam dignissim', NULL),
-(42, 'Curabitur.vel.lectus@laciniamattisInteger.com', 'facilisis', 'Conley', 'Nyssa', '0301370121', 'eu, accumsan sed, facilisis vitae, orci. Phasellus dapibus', NULL),
-(43, 'metus@necmetusfacilisis.edu', 'ipsum', 'Farmer', 'Shaine', '0195002417', 'lobortis ultrices. Vivamus rhoncus. Donec est.', NULL),
-(44, 'consectetuer@vitaemauris.net', 'Duis', 'Terry', 'Jacob', '0194767240', 'malesuada vel, convallis in, cursus et, eros.', NULL),
-(45, 'sem.egestas.blandit@parturient.org', 'odio.', 'Mcclure', 'Gavin', '0272776150', 'aliquet. Proin velit. Sed malesuada augue ut lacus. Nulla', NULL),
-(46, 'nec.urna@perconubianostra.com', 'sed,', 'Fox', 'Christine', '0323824468', 'interdum feugiat. Sed nec metus facilisis lorem', NULL),
-(47, 'orci.Ut.sagittis@nunc.edu', 'arcu.', 'Logan', 'Nasim', '0100711044', 'augue, eu tempor erat neque non quam. Pellentesque habitant', NULL),
-(48, 'ut.cursus@elitNullafacilisi.co.uk', 'semper', 'Koch', 'Graiden', '0514495123', 'aliquet diam. Sed diam lorem,', NULL),
-(49, 'faucibus.ut@mollisnon.co.uk', 'at', 'Dillon', 'Marcia', '0716019232', 'Mauris nulla. Integer urna. Vivamus molestie dapibus ligula. Aliquam erat', NULL),
-(50, 'Cum.sociis.natoque@Integer.co.uk', 'orci.', 'Greene', 'Uriah', '0786462272', 'nec, leo. Morbi neque tellus, imperdiet non,', NULL),
-(51, 'est@risusNulla.com', 'pede', 'Berry', 'Yardley', '0986403700', 'arcu. Vivamus sit amet risus. Donec egestas. Aliquam', NULL),
-(52, 'urna@arcu.com', 'Aliquam', 'Bowers', 'Warren', '0328178389', 'eget magna. Suspendisse tristique neque venenatis', NULL),
-(53, 'tincidunt@Pellentesquetincidunttempus.edu', 'mauris', 'Clemons', 'Blossom', '0883367285', 'Aliquam erat volutpat. Nulla facilisis.', NULL),
-(54, 'enim.consequat.purus@sem.com', 'varius', 'Collins', 'Victor', '0509157161', 'Donec fringilla. Donec feugiat metus sit amet ante.', NULL),
-(55, 'non@eleifendnunc.org', 'vel,', 'Steele', 'Nicholas', '0715339715', 'Aenean egestas hendrerit neque. In ornare', NULL),
-(56, 'Maecenas@consectetuereuismod.org', 'a', 'Day', 'Justina', '0831696384', 'Curabitur vel lectus. Cum sociis natoque penatibus et magnis', NULL),
-(57, 'felis.orci.adipiscing@vulputatemaurissagittis.edu', 'augue.', 'Gaines', 'Tanner', '0206087432', 'Mauris blandit enim consequat purus. Maecenas libero est,', NULL),
-(58, 'mauris.a@mollis.org', 'Nam', 'Browning', 'Patience', '0104348284', 'diam. Pellentesque habitant morbi tristique', NULL),
-(59, 'mi@utpharetrased.co.uk', 'eget', 'Dunn', 'Mariam', '0718741325', 'in consequat enim diam vel arcu. Curabitur ut odio vel', NULL),
-(60, 'lobortis@tristiquesenectus.edu', 'magna', 'Clark', 'Alana', '0344893611', 'ornare. In faucibus. Morbi vehicula. Pellentesque', NULL),
-(61, 'tincidunt@sit.org', 'Fusce', 'Jensen', 'Jordan', '0268177284', 'nec urna et arcu imperdiet ullamcorper.', NULL),
-(62, 'arcu@dapibusid.co.uk', 'odio', 'Brady', 'Erasmus', '0468765404', 'lorem eu metus. In lorem. Donec elementum, lorem ut', NULL),
-(63, 'primis.in.faucibus@urnaconvalliserat.co.uk', 'quam', 'Marquez', 'Tanek', '0284800677', 'at, iaculis quis, pede. Praesent eu dui.', NULL),
-(64, 'leo.Morbi.neque@metusIn.ca', 'erat.', 'Francis', 'Preston', '0903866307', 'Aenean eget metus. In nec orci. Donec nibh.', NULL),
-(65, 'eu.nulla@turpis.co.uk', 'purus', 'Harrington', 'Abdul', '0578544618', 'iaculis quis, pede. Praesent eu dui. Cum sociis', NULL),
-(66, 'et.ultrices@Aliquamrutrumlorem.net', 'magna', 'Dillard', 'Kylie', '0325005735', 'diam. Pellentesque habitant morbi tristique', NULL),
-(67, 'et@Sedneque.co.uk', 'at,', 'Mejia', 'Hunter', '0137511008', 'aliquet odio. Etiam ligula tortor, dictum eu, placerat eget,', NULL),
-(68, 'sem@turpis.net', 'mi', 'Goodman', 'Tad', '0718414386', 'mauris. Suspendisse aliquet molestie tellus. Aenean egestas hendrerit neque. In', NULL),
-(69, 'Ut@atlibero.com', 'mauris,', 'Trujillo', 'Shay', '0154935281', 'sed dui. Fusce aliquam, enim nec tempus scelerisque,', NULL),
-(70, 'dictum@enim.com', 'amet,', 'Hawkins', 'Xander', '0563215524', 'nunc id enim. Curabitur massa. Vestibulum accumsan neque', NULL),
-(71, 'rutrum.non.hendrerit@sollicitudin.co.uk', 'vel,', 'Key', 'Forrest', '0996452249', 'erat volutpat. Nulla dignissim. Maecenas ornare egestas ligula. Nullam feugiat', NULL),
-(72, 'amet@sedtortorInteger.com', 'montes,', 'Johns', 'Claire', '0769818415', 'eu augue porttitor interdum. Sed', NULL),
-(73, 'netus.et@nonummyut.edu', 'molestie.', 'Larson', 'Renee', '0620901032', 'dictum. Proin eget odio. Aliquam vulputate', NULL),
-(74, 'dapibus.quam.quis@elitfermentumrisus.co.uk', 'laoreet', 'Franklin', 'Ariel', '0539787541', 'vehicula aliquet libero. Integer in magna. Phasellus', NULL),
-(75, 'vulputate.risus.a@ultrices.org', 'quam', 'Rodriquez', 'Eleanor', '0473880870', 'Nulla interdum. Curabitur dictum. Phasellus in felis. Nulla tempor augue', NULL),
-(76, 'eu.arcu.Morbi@orci.edu', 'ipsum', 'Mitchell', 'Kaitlin', '0626212461', 'ante. Maecenas mi felis, adipiscing fringilla, porttitor vulputate, posuere', NULL),
-(77, 'eu.enim@disparturient.co.uk', 'vitae', 'Ortega', 'Plato', '0276873859', 'nec luctus felis purus ac tellus. Suspendisse sed dolor.', NULL),
-(78, 'eget.massa@ac.net', 'dui', 'Tillman', 'Tiger', '0277555963', 'magna tellus faucibus leo, in lobortis', NULL),
-(79, 'Cras.dolor@eleifendegestasSed.ca', 'tellus', 'Copeland', 'Jordan', '0373223576', 'arcu vel quam dignissim pharetra. Nam', NULL),
-(80, 'nunc.interdum.feugiat@Quisqueimperdieterat.edu', 'malesuada.', 'Curry', 'Lamar', '0474671726', 'nec, euismod in, dolor. Fusce feugiat. Lorem', NULL),
-(81, 'vitae.risus@Nullamenim.net', 'lorem', 'Petty', 'Elmo', '0648424142', 'ante dictum mi, ac mattis velit justo', NULL),
-(82, 'Integer.aliquam.adipiscing@ornare.com', 'dictum', 'Fitzpatrick', 'Maxwell', '0606182565', 'aliquet, sem ut cursus luctus, ipsum leo elementum', NULL),
-(83, 'ac.turpis@Donectempor.edu', 'interdum', 'Reyes', 'Rhoda', '0728068015', 'lobortis augue scelerisque mollis. Phasellus libero mauris, aliquam', NULL),
-(84, 'et.rutrum@massa.net', 'risus.', 'Holden', 'Tashya', '0707859535', 'nec, cursus a, enim. Suspendisse aliquet, sem ut', NULL),
-(85, 'Cras.lorem.lorem@ipsum.ca', 'Sed', 'Gilliam', 'Grace', '0658051481', 'imperdiet, erat nonummy ultricies ornare, elit elit fermentum risus, at', NULL),
-(86, 'nec.leo@malesuada.co.uk', 'Fusce', 'Mcpherson', 'Shannon', '0249149452', 'odio. Aliquam vulputate ullamcorper magna. Sed eu', NULL),
-(87, 'neque@Nullaaliquet.com', 'magna.', 'Cain', 'Lester', '0488022611', 'Duis dignissim tempor arcu. Vestibulum', NULL),
-(88, 'Mauris@dignissim.com', 'quam', 'Chapman', 'Cain', '0246731224', 'non, cursus non, egestas a, dui. Cras pellentesque.', NULL),
-(89, 'sed.sem.egestas@antebibendumullamcorper.ca', 'ipsum', 'Emerson', 'Kerry', '0531514682', 'eget varius ultrices, mauris ipsum porta elit, a', NULL),
-(90, 'aliquet.molestie.tellus@urnajustofaucibus.com', 'mauris', 'Parsons', 'Phelan', '0907178111', 'nibh lacinia orci, consectetuer euismod est arcu ac orci. Ut', NULL),
-(91, 'Nam.interdum.enim@inconsectetueripsum.net', 'amet', 'Hartman', 'Kitra', '0585017880', 'interdum enim non nisi. Aenean eget metus. In nec orci.', NULL),
-(92, 'Nulla.tincidunt.neque@habitantmorbi.net', 'tristique', 'Hardin', 'Clio', '0673132301', 'netus et malesuada fames ac turpis', NULL),
-(93, 'Ut.tincidunt@dignissimpharetraNam.ca', 'Nulla', 'Wilkerson', 'Myra', '0463263000', 'a tortor. Nunc commodo auctor velit. Aliquam', NULL),
-(94, 'Duis@tinciduntorciquis.net', 'ultricies', 'Hutchinson', 'Rafael', '0574655918', 'nulla magna, malesuada vel, convallis in, cursus et,', NULL),
-(95, 'elit.Etiam@NullainterdumCurabitur.co.uk', 'rhoncus.', 'Logan', 'Neve', '0254282323', 'tempor diam dictum sapien. Aenean', NULL),
-(96, 'neque.pellentesque@velit.com', 'convallis', 'Moon', 'Ifeoma', '0715515929', 'tellus. Phasellus elit pede, malesuada vel, venenatis vel,', NULL),
-(97, 'a.felis.ullamcorper@facilisisSuspendisse.edu', 'est.', 'Short', 'Ignacia', '0630798185', 'interdum enim non nisi. Aenean eget', NULL),
-(98, 'nec.cursus@at.edu', 'vel', 'Frank', 'Miriam', '0757085076', 'dui. Fusce aliquam, enim nec tempus scelerisque,', NULL),
-(99, 'ultrices@maurisrhoncusid.edu', 'Aliquam', 'Keith', 'Jolie', '0310347261', 'Maecenas mi felis, adipiscing fringilla, porttitor', NULL),
-(100, 'Donec@anteNunc.edu', 'quis,', 'Wilcox', 'Skyler', '0526776811', 'mus. Proin vel arcu eu odio tristique pharetra. Quisque ac', NULL),
-(101, 'eget.magna.Suspendisse@Vivamussit.com', 'aptent', 'Horne', 'Idona', '0950942527', 'molestie arcu. Sed eu nibh vulputate mauris sagittis placerat. Cras', NULL),
-(102, 'elit.Etiam@egetipsumSuspendisse.com', 'orci,', 'Odom', 'Madeson', '0718073107', 'nec, euismod in, dolor. Fusce feugiat. Lorem ipsum dolor sit', NULL),
-(103, 'elit.pellentesque@Duis.com', 'sit', 'Mcclain', 'Jordan', '0520249294', 'elit. Nulla facilisi. Sed neque. Sed eget lacus.', NULL),
-(104, 'mi.ac.mattis@dictum.co.uk', 'augue', 'Berry', 'Yvonne', '0246281381', 'vitae, aliquet nec, imperdiet nec, leo. Morbi neque tellus, imperdiet', NULL),
-(105, 'in.magna@amet.co.uk', 'eget', 'Bass', 'Jordan', '0778346326', 'ullamcorper eu, euismod ac, fermentum vel, mauris. Integer sem elit,', NULL),
-(106, 'nec@feugiatSed.co.uk', 'nec', 'Sexton', 'Rudyard', '0435641697', 'mollis vitae, posuere at, velit. Cras lorem', NULL),
-(107, 'Etiam.vestibulum.massa@VivamusnisiMauris.co.uk', 'sed', 'Jimenez', 'Rudyard', '0504686357', 'odio. Etiam ligula tortor, dictum eu, placerat eget, venenatis', NULL),
-(108, 'amet.orci@pede.ca', 'libero.', 'Price', 'Alec', '0929075161', 'ante. Maecenas mi felis, adipiscing fringilla, porttitor vulputate, posuere vulputate,', NULL),
-(109, 'sed.orci.lobortis@maurisSuspendissealiquet.com', 'convallis', 'Rowland', 'Kylie', '0396375414', 'aliquet molestie tellus. Aenean egestas hendrerit', NULL),
-(110, 'lacus.Cras@duinec.ca', 'vitae', 'Mcfarland', 'May', '0265682613', 'Duis cursus, diam at pretium aliquet,', NULL),
-(111, 'enim.Etiam@Duisdignissimtempor.ca', 'sed', 'Dotson', 'Keefe', '0258133673', 'ipsum. Curabitur consequat, lectus sit amet luctus vulputate, nisi', NULL),
-(112, 'non.lacinia.at@arcuSed.com', 'Sed', 'Powell', 'Adena', '0504628589', 'Sed congue, elit sed consequat auctor, nunc', NULL),
-(113, 'miyazaki1@yopmail.com', '123+aze', 'zaj', 'Jean', '0392313222', NULL, NULL),
-(114, 'mlolap3@yopmail.com', '123+aze', 'dumpont', 'jmean', '0231328189', 'nn', NULL),
-(115, 'zakaria@mail.fr', '123+aze', 'rh', 'zakaria', '0123456789', 'non', NULL);
-
---
--- Déclencheurs `utilisateur`
---
-DELIMITER $$
-
-DROP TRIGGER IF EXISTS inscription_mailing_auto$$
-CREATE TRIGGER `inscription_mailing_auto` AFTER INSERT ON `utilisateur` FOR EACH ROW BEGIN   
+  -- --------------------------------------------------
+  -- -- Drop pour clear la BDD (tables & procédures)
+  -- --------------------------------------------------
+  DROP TABLE IF EXISTS videgrenier;
+  DROP TABLE IF EXISTS utilisateur;
+  DROP TABLE IF EXISTS statuts;
+  DROP TABLE IF EXISTS reservation_vg;
+  DROP TABLE IF EXISTS mailing_list;
+  DROP TABLE IF EXISTS places;
   
-	INSERT INTO mailing_list (MAIL_ML) VALUE(NEW.MAIL_UTIL);
+  DROP PROCEDURE IF EXISTS add_mailing_list;
+  DROP PROCEDURE IF EXISTS remove_mailing_list;
+  DROP TRIGGER IF EXISTS inscription_mailing_auto;
+
+  -- ---------------------------------------------
+  -- -- Créer les Procédures
+  -- ---------------------------------------------
+  DELIMITER $$
+
+  CREATE DEFINER=`root`@`localhost` PROCEDURE `add_mailing_list` (IN `mail` VARCHAR(100))  BEGIN
+    INSERT INTO mailing_list(MAIL_ML) VALUES (mail);
+  END$$
+
+  CREATE DEFINER=`root`@`localhost` PROCEDURE `remove_mailing_list` (IN `mail` VARCHAR(100))  BEGIN
+    DELETE FROM mailing_list WHERE MAIL_ML = mail;
+  END$$
+
+  DELIMITER ;
+
+
+
+  -- --------------------------------------------------------
+  -- Structure de la table `mailing_list`
+  -- --------------------------------------------------------
+  CREATE TABLE `mailing_list` (
+    `ID_ML` int(11) PRIMARY KEY NOT NULL AUTO_INCREMENT, 
+    `MAIL_ML` varchar(50) DEFAULT NULL
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  -- --------------------------------------------------------
+  -- Structure de la table `reservation_vg`
+  -- --------------------------------------------------------
+  CREATE TABLE `reservation_vg` (
+    `ID_RESA` int(11) PRIMARY KEY  NOT NULL AUTO_INCREMENT,
+    `ID_VG` int(11) NOT NULL,
+    `ID_UTIL` int(11) NOT NULL,
+    `NOM_RESA` varchar(50) NOT NULL,
+    `PRENOM_RESA` varchar(50) NOT NULL,
+    `MAIL_RESA` varchar(50) NOT NULL,
+    `ADDRESSE_RESA` varchar(100) NOT NULL,
+    `CODE_POSTAL_RESA` varchar(6) NOT NULL,
+    `VILLE_RESA` varchar(50) NOT NULL,
+    `PORTABLE_RESA` varchar(15) DEFAULT NULL,
+    `CNI_RESA` varchar(12) NOT NULL,
+    `DELIVRE_CNI_RESA` varchar(10) NOT NULL,
+    `PAR_CNI_RESA` varchar(50) NOT NULL,
+    `IMMATRICULATION_RESA` varchar(10) NOT NULL,
+    `NBR_RESA` int(11) NOT NULL,
+    `INFO_RESA` varchar(150) DEFAULT NULL,
+    `STATU_RESA` int(11) NOT NULL DEFAULT 1
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  -- --------------------------------------------------------
+  -- Structure de la table `statuts`
+  -- --------------------------------------------------------
+  CREATE TABLE `statuts` (
+    `ID_STATUTS` int(11) PRIMARY KEY  NOT NULL AUTO_INCREMENT,
+    `LABEL_STATUTS` varchar(15) NOT NULL
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+  -- --------------------------------------------------------
+  -- Structure de la table `utilisateur`
+  -- --------------------------------------------------------
+  CREATE TABLE `utilisateur` (
+    `ID_UTIL` int(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `MAIL_UTIL` varchar(50) NOT NULL,
+    `MDP_UTIL` varchar(30) NOT NULL,
+    `NOM_UTIL` varchar(50) DEFAULT NULL,
+    `PRENOM_UTIL` varchar(50) DEFAULT NULL,
+    `TEL_UTIL` varchar(15) DEFAULT NULL,
+    `DESC_UTIL` varchar(280) DEFAULT NULL,
+    `ADMIN_UTIL` tinyint(1) DEFAULT NULL
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+  -- --------------------------------------------------------
+  -- Structure de la table `videgrenier`
+  -- --------------------------------------------------------
+  CREATE TABLE `videgrenier` (
+    `ID_VG` int(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `LABEL_VG` varchar(50) DEFAULT NULL,
+    `DATE_VG` varchar(11) DEFAULT NULL,
+    `HEURE_VG` varchar(15) NOT NULL,
+    `ADDRESSE_VG` varchar(100) NOT NULL,
+    `NBR_EMPLACEMENTS` int(11) DEFAULT NULL,
+    `NBR_RESTANT_VG` int(11) NOT NULL,
+    `PRIX_EMPLACEMENTS` decimal(10,0) DEFAULT NULL
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+  -- --------------------------------------------------------
+  -- Structure de la table `places`
+  -- --------------------------------------------------------
+  CREATE TABLE `places` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `coords` VARCHAR(50) NOT NULL,
+    type VARCHAR(100) NOT NULL,
+    PRIMARY KEY (id)
+  ) ENGINE = InnoDB;
+
+  -- --------------------------------------------------------
+  -- Structure de la table `reservation_place`
+  -- --------------------------------------------------------
+  CREATE TABLE `reservation_place` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `reservation_id` int(11) NOT NULL,
+    `place_id` int(11) NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (reservation_id) REFERENCES reservation_vg(ID_RESA),
+    FOREIGN KEY (place_id) REFERENCES places(id)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+  -- --
+  -- -- Index pour la table `reservation_place`
+  -- --
+  -- ALTER TABLE `reservation_place`
+  --   ADD KEY `fk_reservation_place_places` (`place_id`),
+  --   ADD KEY `fk_reservation_place_reservation` (`reservation_id`);
+
+  -- -- --------------------------------------------------------
+  -- -- Clés étrangères table reservation_place
+  -- -- --------------------------------------------------------
+  -- ALTER TABLE `reservation_place`
+  --   ADD CONSTRAINT `fk_reservation_place_places` FOREIGN KEY (`place_id`) REFERENCES `places` (`id`),
+  --   ADD CONSTRAINT `fk_reservation_place_reservation` FOREIGN KEY (`reservation_id`) REFERENCES `reservation_vg` (`ID_RESA`);
+  -- COMMIT;
+
+
+  -- ---------------------------------------------
+  -- trigger `inscription_mailing_auto`
+  -- ---------------------------------------------
+  DELIMITER $$
+
+  CREATE TRIGGER `inscription_mailing_auto` AFTER INSERT ON `utilisateur` FOR EACH ROW BEGIN   
     
-END
-$$
-DELIMITER ;
+    INSERT INTO mailing_list (MAIL_ML) VALUE(NEW.MAIL_UTIL);
+      
+  END
+  $$
+  DELIMITER ;
 
--- --------------------------------------------------------
+  -- ----------------------------------------------------------------------------------
+  -- ----------------------------------------------------------------------------------
+  -- ----------------------------------------------------------------------------------
+
+
+
+  -- ----------------------------------------------------------------------------------
+  -- - Début Insertion des données
+  -- ----------------------------------------------------------------------------------
+
+  --
+  -- Déchargement des données de la table `mailing_list`
+  --
+  INSERT INTO `mailing_list` (`ID_ML`, `MAIL_ML`) VALUES
+  (136, 'compte_inscrit_mailing_list@mail.fr');
+
+  --
+  -- Déchargement des données de la table `reservation_vg`
+  --
+  INSERT INTO `reservation_vg` (`ID_RESA`, `ID_VG`, `ID_UTIL`, `NOM_RESA`, `PRENOM_RESA`, `MAIL_RESA`, `ADDRESSE_RESA`, `CODE_POSTAL_RESA`, `VILLE_RESA`, `PORTABLE_RESA`, `CNI_RESA`, `DELIVRE_CNI_RESA`, `PAR_CNI_RESA`, `IMMATRICULATION_RESA`, `NBR_RESA`, `INFO_RESA`, `STATU_RESA`) VALUES
+  (2, 2, 2, 'mom', 'non', 'adresse@mail.fr', '123 avenue exemple', '12333', 'Lyon', '0123456789', 'ZAEP1EK1E3O1', '12/12/1990', 'Lyon', '123 AB 11', 6, NULL, 2),
+  (4, 2, 2, 'nom', 'prenom', 'aa@ee.fr', '4 aa', '6900', 'sa', '0123456789', 'aaa123a46', '01/01/2000', 'rhone', 'aa-222-ac', 2, NULL, 3);
+
+  --
+  -- Déchargement des données de la table `statuts`
+  --
+  INSERT INTO `statuts` (`ID_STATUTS`, `LABEL_STATUTS`) VALUES
+  (1, 'En attente'),
+  (2, 'Validée'),
+  (3, 'Refusée');
+
+
+  --
+  -- Déchargement des données de la table `utilisateur`
+  --
+  INSERT INTO `utilisateur` (`ID_UTIL`, `MAIL_UTIL`, `MDP_UTIL`, `NOM_UTIL`, `PRENOM_UTIL`, `TEL_UTIL`, `DESC_UTIL`, `ADMIN_UTIL`) VALUES
+  (2, 'adresse@mail.fr', 'aaaaaa', 'Dupiont', 'Rogere', '0222222222', 'dazdazdaz', NULL),
+  (6, 'admin@admin.fr', 'xxxxxx', 'Admin', 'Alvin', NULL, 'Admin du site', 1),
+  (113, 'miyazaki1@yopmail.com', '123+aze', 'zaj', 'Jean', '0392313222', NULL, NULL),
+  (114, 'mlolap3@yopmail.com', '123+aze', 'dumpont', 'jmean', '0231328189', 'nn', NULL),
+  (115, 'zakaria@mail.fr', '123+aze', 'rh', 'zakaria', '0123456789', 'non', NULL);
+
+  --
+  -- Déchargement des données de la table `videgrenier`
+  --
+  INSERT INTO `videgrenier` (`ID_VG`, `LABEL_VG`, `DATE_VG`, `HEURE_VG`, `ADDRESSE_VG`, `NBR_EMPLACEMENTS`, `NBR_RESTANT_VG`, `PRIX_EMPLACEMENTS`) VALUES
+  (2, 'Vide-grenier annuel 2016', '03/07/2016', 'de 6h à 16h', 'Esplanade de la Gravière, Avenue De Limburg., Sainte-foy-lès-lyon 69110', 100, 59, '20'),
+  (3, 'Test vide-grenier par Admin', '10/02/9999', 'de 4h à 23h', 'Un exemple random, 44444 Ville', 102, 95, '300'),
+  (5, 'Vide grenier printemps', '01/04/2021', 'de 08h à 16h', '52 Place des reines, 69004 Lyon', 200, 0, '35');
 
 --
--- Structure de la table `videgrenier`
+-- Déchargement des données de la table `places` (les emplacements pour la carte)
 --
-
-CREATE TABLE `videgrenier` (
-  `ID_VG` int(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  `LABEL_VG` varchar(50) DEFAULT NULL,
-  `DATE_VG` varchar(11) DEFAULT NULL,
-  `HEURE_VG` varchar(15) NOT NULL,
-  `ADDRESSE_VG` varchar(100) NOT NULL,
-  `NBR_EMPLACEMENTS` int(11) DEFAULT NULL,
-  `NBR_RESTANT_VG` int(11) NOT NULL,
-  `PRIX_EMPLACEMENTS` decimal(10,0) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Déchargement des données de la table `videgrenier`
---
-
-INSERT INTO `videgrenier` (`ID_VG`, `LABEL_VG`, `DATE_VG`, `HEURE_VG`, `ADDRESSE_VG`, `NBR_EMPLACEMENTS`, `NBR_RESTANT_VG`, `PRIX_EMPLACEMENTS`) VALUES
-(2, 'Vide-grenier annuel 2016', '03/07/2016', 'de 6h à 16h', 'Esplanade de la Gravière, Avenue De Limburg., Sainte-foy-lès-lyon 69110', 100, 59, '20'),
-(3, 'Test vide-grenier par Admin', '10/02/9999', 'de 4h à 23h', 'Un exemple random, 44444 Ville', 102, 95, '300'),
-(5, 'Vide grenier printemps', '01/04/2021', 'de 08h à 16h', '52 Place des reines, 69004 Lyon', 200, 0, '35');
+INSERT INTO `places` (`id`, `coords`, `type`) VALUES
+(1, '1_1', '_'),
+(2, '1_2', '_'),
+(3, '1_3', '_'),
+(4, '1_4', '_'),
+(5, '1_5', '_'),
+(6, '1_6', '_'),
+(7, '1_7', '_'),
+(8, '1_8', 'a'),
+(9, '1_9', 'a'),
+(10, '1_10', 'a'),
+(11, '1_11', 'a'),
+(12, '1_12', 'a'),
+(13, '1_13', 'a'),
+(14, '1_14', 'a'),
+(15, '1_15', 'a'),
+(16, '1_16', 'a'),
+(17, '1_17', 'a'),
+(18, '1_18', 'a'),
+(19, '1_19', 'a'),
+(20, '1_20', 'a'),
+(21, '1_21', 'a'),
+(22, '1_22', 'a'),
+(23, '1_23', 'a'),
+(24, '1_24', 'a'),
+(25, '1_25', 'a'),
+(26, '1_26', 'a'),
+(27, '1_27', 'a'),
+(28, '1_28', 'a'),
+(29, '1_29', 'a'),
+(30, '1_30', 'a'),
+(31, '1_31', 'a'),
+(32, '1_32', 'a'),
+(33, '1_33', 'a'),
+(34, '1_34', 'a'),
+(35, '1_35', 'a'),
+(36, '1_36', 'a'),
+(37, '1_37', 'a'),
+(38, '1_38', 'a'),
+(39, '1_39', 'a'),
+(40, '1_40', 'a'),
+(41, '1_41', 'a'),
+(42, '2_1', '_'),
+(43, '2_2', '_'),
+(44, '2_3', '_'),
+(45, '2_4', '_'),
+(46, '2_5', '_'),
+(47, '2_6', '_'),
+(48, '2_7', '_'),
+(49, '2_8', 'a'),
+(50, '2_9', '_'),
+(51, '2_10', '_'),
+(52, '2_11', '_'),
+(53, '2_12', '_'),
+(54, '2_13', '_'),
+(55, '2_14', '_'),
+(56, '2_15', '_'),
+(57, '2_16', '_'),
+(58, '2_17', '_'),
+(59, '2_18', '_'),
+(60, '2_19', '_'),
+(61, '2_20', '_'),
+(62, '2_21', '_'),
+(63, '2_22', '_'),
+(64, '2_23', '_'),
+(65, '2_24', '_'),
+(66, '2_25', '_'),
+(67, '2_26', '_'),
+(68, '2_27', '_'),
+(69, '2_28', '_'),
+(70, '2_29', '_'),
+(71, '2_30', '_'),
+(72, '2_31', '_'),
+(73, '2_32', '_'),
+(74, '2_33', '_'),
+(75, '2_34', '_'),
+(76, '2_35', '_'),
+(77, '2_36', '_'),
+(78, '2_37', '_'),
+(79, '2_38', '_'),
+(80, '2_39', '_'),
+(81, '2_40', '_'),
+(82, '2_41', '_'),
+(83, '3_1', '_'),
+(84, '3_2', '_'),
+(85, '3_3', '_'),
+(86, '3_4', '_'),
+(87, '3_5', '_'),
+(88, '3_6', '_'),
+(89, '3_7', '_'),
+(90, '3_8', 'a'),
+(91, '3_9', '_'),
+(92, '3_10', '_'),
+(93, '3_11', 'b'),
+(94, '3_12', 'b'),
+(95, '3_13', 'a'),
+(96, '3_14', 'a'),
+(97, '3_15', 'b'),
+(98, '3_16', '_'),
+(99, '3_17', 'b'),
+(100, '3_18', 'a'),
+(101, '3_19', 'a'),
+(102, '3_20', 'b'),
+(103, '3_21', '_'),
+(104, '3_22', 'b'),
+(105, '3_23', 'a'),
+(106, '3_24', 'a'),
+(107, '3_25', 'b'),
+(108, '3_26', '_'),
+(109, '3_27', 'b'),
+(110, '3_28', 'a'),
+(111, '3_29', 'a'),
+(112, '3_30', 'b'),
+(113, '3_31', '_'),
+(114, '3_32', 'b'),
+(115, '3_33', 'a'),
+(116, '3_34', 'a'),
+(117, '3_35', 'b'),
+(118, '3_36', '_'),
+(119, '3_37', 'b'),
+(120, '3_38', 'a'),
+(121, '3_39', 'a'),
+(122, '3_40', 'b'),
+(123, '3_41', 'a'),
+(124, '4_1', '_'),
+(125, '4_2', '_'),
+(126, '4_3', '_'),
+(127, '4_4', '_'),
+(128, '4_5', '_'),
+(129, '4_6', '_'),
+(130, '4_7', '_'),
+(131, '4_8', 'a'),
+(132, '4_9', '_'),
+(133, '4_10', '_'),
+(134, '4_11', 'b'),
+(135, '4_12', 'b'),
+(136, '4_13', 'a'),
+(137, '4_14', 'a'),
+(138, '4_15', 'b'),
+(139, '4_16', '_'),
+(140, '4_17', 'b'),
+(141, '4_18', 'a'),
+(142, '4_19', 'a'),
+(143, '4_20', 'b'),
+(144, '4_21', '_'),
+(145, '4_22', 'b'),
+(146, '4_23', 'a'),
+(147, '4_24', 'a'),
+(148, '4_25', 'b'),
+(149, '4_26', '_'),
+(150, '4_27', 'b'),
+(151, '4_28', 'a'),
+(152, '4_29', 'a'),
+(153, '4_30', 'b'),
+(154, '4_31', '_'),
+(155, '4_32', 'b'),
+(156, '4_33', 'a'),
+(157, '4_34', 'a'),
+(158, '4_35', 'b'),
+(159, '4_36', '_'),
+(160, '4_37', 'b'),
+(161, '4_38', 'a'),
+(162, '4_39', 'a'),
+(163, '4_40', 'b'),
+(164, '4_41', 'a'),
+(165, '5_1', '_'),
+(166, '5_2', '_'),
+(167, '5_3', '_'),
+(168, '5_4', '_'),
+(169, '5_5', '_'),
+(170, '5_6', '_'),
+(171, '5_7', '_'),
+(172, '5_8', '_'),
+(173, '5_9', '_'),
+(174, '5_10', '_'),
+(175, '5_11', '_'),
+(176, '5_12', '_'),
+(177, '5_13', '_'),
+(178, '5_14', '_'),
+(179, '5_15', '_'),
+(180, '5_16', '_'),
+(181, '5_17', '_'),
+(182, '5_18', '_'),
+(183, '5_19', '_'),
+(184, '5_20', '_'),
+(185, '5_21', '_'),
+(186, '5_22', '_'),
+(187, '5_23', '_'),
+(188, '5_24', '_'),
+(189, '5_25', '_'),
+(190, '5_26', '_'),
+(191, '5_27', '_'),
+(192, '5_28', '_'),
+(193, '5_29', '_'),
+(194, '5_30', '_'),
+(195, '5_31', '_'),
+(196, '5_32', '_'),
+(197, '5_33', '_'),
+(198, '5_34', '_'),
+(199, '5_35', '_'),
+(200, '5_36', '_'),
+(201, '5_37', '_'),
+(202, '5_38', '_'),
+(203, '5_39', '_'),
+(204, '5_40', '_'),
+(205, '5_41', '_'),
+(206, '6_1', '_'),
+(207, '6_2', 'b'),
+(208, '6_3', 'a'),
+(209, '6_4', 'a'),
+(210, '6_5', 'a'),
+(211, '6_6', '_'),
+(212, '6_7', 'b'),
+(213, '6_8', 'a'),
+(214, '6_9', 'a'),
+(215, '6_10', 'b'),
+(216, '6_11', '_'),
+(217, '6_12', 'b'),
+(218, '6_13', 'a'),
+(219, '6_14', 'a'),
+(220, '6_15', 'b'),
+(221, '6_16', '_'),
+(222, '6_17', 'b'),
+(223, '6_18', 'a'),
+(224, '6_19', 'a'),
+(225, '6_20', 'b'),
+(226, '6_21', '_'),
+(227, '6_22', 'b'),
+(228, '6_23', 'a'),
+(229, '6_24', 'a'),
+(230, '6_25', 'b'),
+(231, '6_26', '_'),
+(232, '6_27', 'b'),
+(233, '6_28', 'a'),
+(234, '6_29', 'a'),
+(235, '6_30', 'b'),
+(236, '6_31', '_'),
+(237, '6_32', 'b'),
+(238, '6_33', 'a'),
+(239, '6_34', 'a'),
+(240, '6_35', 'b'),
+(241, '6_36', '_'),
+(242, '6_37', 'b'),
+(243, '6_38', 'a'),
+(244, '6_39', 'a'),
+(245, '6_40', 'b'),
+(246, '6_41', 'a'),
+(247, '7_1', '_'),
+(248, '7_2', 'b'),
+(249, '7_3', 'a'),
+(250, '7_4', 'a'),
+(251, '7_5', 'a'),
+(252, '7_6', '_'),
+(253, '7_7', 'b'),
+(254, '7_8', 'a'),
+(255, '7_9', 'a'),
+(256, '7_10', 'b'),
+(257, '7_11', '_'),
+(258, '7_12', 'b'),
+(259, '7_13', 'a'),
+(260, '7_14', 'a'),
+(261, '7_15', 'b'),
+(262, '7_16', '_'),
+(263, '7_17', 'b'),
+(264, '7_18', 'a'),
+(265, '7_19', 'a'),
+(266, '7_20', 'b'),
+(267, '7_21', '_'),
+(268, '7_22', 'b'),
+(269, '7_23', 'a'),
+(270, '7_24', 'a'),
+(271, '7_25', 'b'),
+(272, '7_26', '_'),
+(273, '7_27', 'b'),
+(274, '7_28', 'a'),
+(275, '7_29', 'a'),
+(276, '7_30', 'b'),
+(277, '7_31', '_'),
+(278, '7_32', 'b'),
+(279, '7_33', 'a'),
+(280, '7_34', 'a'),
+(281, '7_35', 'b'),
+(282, '7_36', '_'),
+(283, '7_37', 'b'),
+(284, '7_38', 'a'),
+(285, '7_39', 'a'),
+(286, '7_40', 'b'),
+(287, '7_41', 'a'),
+(288, '8_1', 'a'),
+(289, '8_2', '_'),
+(290, '8_3', '_'),
+(291, '8_4', '_'),
+(292, '8_5', '_'),
+(293, '8_6', 'a'),
+(294, '8_7', 'a'),
+(295, '8_8', '_'),
+(296, '8_9', '_'),
+(297, '8_10', '_'),
+(298, '8_11', '_'),
+(299, '8_12', 'a'),
+(300, '8_13', 'a'),
+(301, '8_14', '_'),
+(302, '8_15', '_'),
+(303, '8_16', '_'),
+(304, '8_17', '_'),
+(305, '8_18', 'a'),
+(306, '8_19', 'a'),
+(307, '8_20', '_'),
+(308, '8_21', '_'),
+(309, '8_22', '_'),
+(310, '8_23', '_'),
+(311, '8_24', 'a'),
+(312, '8_25', 'a'),
+(313, '8_26', '_'),
+(314, '8_27', '_'),
+(315, '8_28', '_'),
+(316, '8_29', '_'),
+(317, '8_30', 'a'),
+(318, '8_31', 'a'),
+(319, '8_32', '_'),
+(320, '8_33', '_'),
+(321, '8_34', '_'),
+(322, '8_35', '_'),
+(323, '8_36', 'a'),
+(324, '8_37', 'a'),
+(325, '8_38', '_'),
+(326, '8_39', '_'),
+(327, '8_40', '_'),
+(328, '8_41', '_');
